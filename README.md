@@ -16,3 +16,7 @@ uvicorn main:app --reload
 ```
 ##
 FE: Flutter
+```
+flutter run
+```
+
