@@ -9,7 +9,8 @@ from models.user import User, UserInformation
 from repositories.jwt_repository import JWTBearer
 from repositories.user_repository import UserRepository, UserInformationRepository, UserAddressRepository
 from schemas.schema import ResponseSchema
-from schemas.user_schema import UserSchema, UserAdminCreateSchema, UserInformationSchema, UserAddressSchema
+from schemas.user_schema import UserSchema, UserAdminCreateSchema, UserInformationSchema, UserAddressSchema, \
+    UserBankAccountSchema
 from ultis.security import get_current_user
 
 user_route = APIRouter(
@@ -113,3 +114,108 @@ def update_user_info(user_id: int, user_info: UserInformationSchema,
         user_info_db.identity_card_code = user_info.identity_card_code
         UserInformationRepository.update(db, user_info_db)
         return ResponseSchema.from_api_route(status_code=200, data=user_info_db).dict(exclude_none=True)
+
+
+@user_route.post('/user-address/{user_id}', dependencies=[Depends(JWTBearer())],
+                 response_model=ResponseSchema[UserAddressSchema])
+def create_user_address(user_id: int, user_address: UserAddressSchema, db: Session = Depends(get_db)):
+    user = UserRepository.find_by_id(db, User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_address_ct = UserAddressRepository.insert(db, user_address)
+    return ResponseSchema.from_api_route(status_code=200, data=user_address_ct).dict(exclude_none=True)
+
+
+@user_route.put('/user-address/{user_id}', dependencies=[Depends(JWTBearer())],
+                response_model=ResponseSchema[UserSchema])
+def update_user_address(user_id: int, user_address: UserAddressSchema, db: Session = Depends(get_db)):
+    user = UserRepository.find_by_id(db, User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_address_db = UserAddressRepository.find_by_user_id(db, user_id)
+    if not user_address_db:
+        user_address_ct = UserAddressRepository.insert(db, user_address)
+        return ResponseSchema.from_api_route(status_code=200, data=user_address_ct).dict(exclude_none=True)
+    else:
+        user_address_db.address = user_address.address
+        user_address_db.district = user_address.district
+        user_address_db.ward = user_address.ward
+        user_address_db.city = user_address.city
+        user_address_db.province = user_address.province
+        user_address_db.sub_phone_number = user_address.sub_phone_number
+        UserAddressRepository.update(db, user_address_db)
+        return ResponseSchema.from_api_route(status_code=200, data=user_address_db).dict(exclude_none=True)
+
+
+@user_route.get('/user-address/{user_id}', dependencies=[Depends(JWTBearer())],
+                response_model=ResponseSchema[List[UserAddressSchema]])
+def get_user_address(user_id: int, db: Session = Depends(get_db)):
+    user = UserRepository.find_by_id(db, User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_address = UserAddressRepository.find_all_by_user_id(db, user_id)
+    return ResponseSchema.from_api_route(status_code=200, data=user_address).dict(exclude_none=True)
+
+
+@user_route.delete('/user-address/{user_id}', dependencies=[Depends(JWTBearer())],
+                   response_model=ResponseSchema[UserAddressSchema])
+def delete_user_address(user_id: int, user_address_id: int, db: Session = Depends(get_db)):
+    user = UserRepository.find_by_id(db, User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_address = UserAddressRepository.find_by_id(db, UserAddressSchema, user_address_id)
+    if not user_address:
+        raise HTTPException(status_code=404, detail="User address not found")
+    UserAddressRepository.delete(db, user_address)
+    return ResponseSchema.from_api_route(status_code=200, data=user_address).dict(exclude_none=True)
+
+
+@user_route.post('/user-bank-account/{user_id}', dependencies=[Depends(JWTBearer())],
+                 response_model=ResponseSchema[UserBankAccountSchema])
+def create_user_bank_account(user_id: int, user_bank_account: UserBankAccountSchema, db: Session = Depends(get_db)):
+    user = UserRepository.find_by_id(db, User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_bank_account_ct = UserAddressRepository.insert(db, user_bank_account)
+    return ResponseSchema.from_api_route(status_code=200, data=user_bank_account_ct).dict(exclude_none=True)
+
+
+@user_route.put('/user-bank-account/{user_id}', dependencies=[Depends(JWTBearer())],
+                response_model=ResponseSchema[UserBankAccountSchema])
+def update_user_bank_account(user_id: int, user_bank_account: UserBankAccountSchema, db: Session = Depends(get_db)):
+    user = UserRepository.find_by_id(db, User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_bank_account_db = UserAddressRepository.find_by_user_id(db, user_id)
+    if not user_bank_account_db:
+        user_bank_account_ct = UserAddressRepository.insert(db, user_bank_account)
+        return ResponseSchema.from_api_route(status_code=200, data=user_bank_account_ct).dict(exclude_none=True)
+    else:
+        user_bank_account_db.bank_name = user_bank_account.bank_name
+        user_bank_account_db.bank_account_number = user_bank_account.bank_account_number
+        user_bank_account_db.bank_account_name = user_bank_account.bank_account_name
+        UserAddressRepository.update(db, user_bank_account_db)
+        return ResponseSchema.from_api_route(status_code=200, data=user_bank_account_db).dict(exclude_none=True)
+
+
+@user_route.get('/user-bank-account/{user_id}', dependencies=[Depends(JWTBearer())],
+                response_model=ResponseSchema[List[UserBankAccountSchema]])
+def get_user_bank_account(user_id: int, db: Session = Depends(get_db)):
+    user = UserRepository.find_by_id(db, User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_bank_account = UserAddressRepository.find_all_by_user_id(db, user_id)
+    return ResponseSchema.from_api_route(status_code=200, data=user_bank_account).dict(exclude_none=True)
+
+
+@user_route.delete('/user-bank-account/{user_id}', dependencies=[Depends(JWTBearer())],
+                   response_model=ResponseSchema[UserBankAccountSchema])
+def delete_user_bank_account(user_id: int, user_bank_account_id: int, db: Session = Depends(get_db)):
+    user = UserRepository.find_by_id(db, User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user_bank_account = UserAddressRepository.find_by_id(db, UserBankAccountSchema, user_bank_account_id)
+    if not user_bank_account:
+        raise HTTPException(status_code=404, detail="User bank account not found")
+    UserAddressRepository.delete(db, user_bank_account)
+    return ResponseSchema.from_api_route(status_code=200, data=user_bank_account).dict(exclude_none=True)

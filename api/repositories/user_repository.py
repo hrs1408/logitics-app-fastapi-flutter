@@ -29,6 +29,10 @@ class UserAddressRepository(BaseRepository):
     def find_by_user_id(db: Session, user_id):
         return db.query(User).filter(User.id == user_id).first()
 
+    @staticmethod
+    def find_all_by_user_id(db: Session, user_id):
+        return db.query(User).filter(User.id == user_id).all()
+
 
 class UserBankAccountRepository(BaseRepository):
     @staticmethod
