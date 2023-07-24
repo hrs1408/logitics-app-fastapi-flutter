@@ -1,6 +1,7 @@
 from typing import Optional, List
 
-from pydantic import BaseModel
+from fastapi import HTTPException
+from pydantic import BaseModel, root_validator
 
 
 class UserInformationBase(BaseModel):
@@ -61,3 +62,24 @@ class UserSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserAdminCreateSchema(BaseModel):
+    email: str
+    full_name: str
+    password: str
+    confirm_password: str
+    user_role: str
+
+    @root_validator()
+    def validate_password(cls, values):
+        password = values.get('password')
+        confirm_password = values.get('confirm_password')
+        if (password != confirm_password):
+            raise HTTPException(status_code=400, detail="Password and confirm password not match")
+        if password is None or (len(password) == 0) or (password == ''):
+            raise HTTPException(status_code=400, detail="Password is required")
+        if password and len(password) < 8:
+            raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
+        return values
+

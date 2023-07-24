@@ -9,6 +9,7 @@ from database.database import engine
 from models import user
 from models.user import User
 from routes.auth_route import auth
+from routes.user_route import user_route
 from schemas.schema import Route
 
 user.Base.metadata.create_all(bind=engine)
@@ -50,4 +51,5 @@ app.add_middleware(
 )
 
 app.include_router(prefix="/api", router=auth)
+app.include_router(prefix="/api", router=user_route)
 app.mount("/medias", StaticFiles(directory="medias"), name="medias")
