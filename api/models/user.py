@@ -40,14 +40,20 @@ class User(Base):
     hashed_password = Column(String(255))
     user_role = Column(String(255), default=UserRole.CLIENT, nullable=False)
     user_position_id = Column(Integer, ForeignKey('user_position.id'), default=2)
+    branch_id = Column(Integer, ForeignKey('branches.id'), nullable=True)
+    vehicle_id = Column(Integer, ForeignKey('vehicles.id'), nullable=True)
     is_active = Column(String(255), default=True, nullable=False)
     refresh_token_sub = Column(String(255), nullable=True)
 
+    invoices = relationship("Invoice", back_populates="user", uselist=True)
     user_position = relationship("UserPosition", back_populates="users", uselist=False)
+    branches = relationship("Branch", back_populates="users", uselist=False)
+    vehicles = relationship("Vehicle", back_populates="users", uselist=False)
     user_information = relationship("UserInformation", back_populates="user", uselist=False)
     user_address = relationship("UserAddress", back_populates="user", uselist=True)
     user_bank_account = relationship("UserBankAccount", back_populates="user", uselist=True)
-
+    pickup_voyages = relationship("Voyage", foreign_keys='Voyage.pickup_staff_id', back_populates="pickup_staff", uselist=True)
+    delivery_voyages = relationship("Voyage", foreign_keys='Voyage.delivery_staff_id', back_populates="delivery_staff", uselist=True)
 
 class UserInformation(Base):
     __tablename__ = 'user_information'
@@ -77,7 +83,7 @@ class UserAddress(Base):
     user_id = Column(Integer, ForeignKey('users.id'))
 
     user = relationship('User', back_populates='user_address')
-
+    invoices = relationship("Invoice", back_populates="user_address", uselist=True)
 
 class UserBankAccount(Base):
     __tablename__ = 'user_bank_account'

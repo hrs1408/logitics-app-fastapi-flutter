@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 
 from database.database import engine
-from models import user
+from models import user, vehicle, branch, invoice
 from models.user import User
 from routes.auth_route import auth
 from routes.position_route import position
@@ -14,6 +14,9 @@ from routes.user_route import user_route
 from schemas.schema import Route
 
 user.Base.metadata.create_all(bind=engine)
+vehicle.Base.metadata.create_all(bind=engine)
+branch.Base.metadata.create_all(bind=engine)
+invoice.Base.metadata.create_all(bind=engine)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
