@@ -54,6 +54,7 @@ class UserSchema(BaseModel):
     email: str
     hashed_password: str
     user_role: str
+    user_position_id: int
     is_active: bool
     refresh_token_sub: Optional[str]
     user_information: Optional[UserInformationSchema]
@@ -83,3 +84,14 @@ class UserAdminCreateSchema(BaseModel):
             raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
         return values
 
+
+class UserPositionBase(BaseModel):
+    position_name: str
+
+
+class UserPositionSchema(UserPositionBase):
+    id: int
+    users: List[UserSchema]
+
+    class Config:
+        orm_mode = True

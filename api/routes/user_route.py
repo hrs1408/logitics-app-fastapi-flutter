@@ -11,6 +11,7 @@ from repositories.user_repository import UserRepository, UserInformationReposito
 from schemas.schema import ResponseSchema
 from schemas.user_schema import UserSchema, UserAdminCreateSchema, UserInformationSchema, UserAddressSchema, \
     UserBankAccountSchema
+from ultis.permission import check_permission_role_admin
 from ultis.security import get_current_user
 
 user_route = APIRouter(
@@ -21,26 +22,16 @@ user_route = APIRouter(
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def check_permission(id: int, db: Session = Depends(get_db)):
-    check_user = UserRepository.find_by_id(db, User, id)
-    if not check_user:
-        raise HTTPException(status_code=404, detail="User not found or not login")
-    if check_user.user_role != "admin" and check_user.user_role != "supper_admin":
-        raise HTTPException(status_code=403, detail="Permission denied")
-    if not check_user.is_active or check_user.is_active is False or check_user.is_active == 0 or check_user.is_active == "0":
-        raise HTTPException(status_code=403, detail="User is de-active")
-
-
 @user_route.get("/", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[List[UserSchema]])
 def get_all_user(id: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    check_permission(id, db)
+    check_permission_role_admin(id, db)
     users = UserRepository.find_all(db, User)
     return ResponseSchema.from_api_route(status_code=200, data=users).dict(exclude_none=True)
 
 
 @user_route.post('/', dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[UserSchema])
 def create_user(user: UserAdminCreateSchema, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    check_permission(id, db)
+    check_permission_role_admin(id, db)
     is_email_already_exist = UserRepository.find_by_email(db, user.email)
     if is_email_already_exist:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -60,7 +51,7 @@ def create_user(user: UserAdminCreateSchema, id: int = Depends(get_current_user)
 
 @user_route.put('/de-active/{user_id}', dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[UserSchema])
 def de_active_user(user_id: int, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    check_permission(id, db)
+    check_permission_role_admin(id, db)
     user = UserRepository.find_by_id(db, User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -71,7 +62,7 @@ def de_active_user(user_id: int, id: int = Depends(get_current_user), db: Sessio
 
 @user_route.put('/active/{user_id}', dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[UserSchema])
 def active_user(user_id: int, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    check_permission(id, db)
+    check_permission_role_admin(id, db)
     user = UserRepository.find_by_id(db, User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -82,7 +73,7 @@ def active_user(user_id: int, id: int = Depends(get_current_user), db: Session =
 
 @user_route.delete('/{user_id}', dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[UserSchema])
 def delete_user(user_id: int, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    check_permission(id, db)
+    check_permission_role_admin(id, db)
     user = UserRepository.find_by_id(db, User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")

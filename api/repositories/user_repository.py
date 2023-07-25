@@ -38,3 +38,9 @@ class UserBankAccountRepository(BaseRepository):
     @staticmethod
     def find_by_user_id(db: Session, user_id):
         return db.query(User).filter(User.id == user_id).first()
+
+
+class UserPositionRepository(BaseRepository):
+    @staticmethod
+    def find_by_user_id(db: Session, user_id):
+        return db.query(User).filter(User.id == user_id).first()

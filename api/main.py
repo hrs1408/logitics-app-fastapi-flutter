@@ -9,6 +9,7 @@ from database.database import engine
 from models import user
 from models.user import User
 from routes.auth_route import auth
+from routes.position_route import position
 from routes.user_route import user_route
 from schemas.schema import Route
 
@@ -27,13 +28,26 @@ wrap_app_responses(app, Route)
 @app.on_event("startup")
 def start_up_event():
     db = SessionLocal()
+    root_position = db.query(user.UserPosition).filter(user.UserPosition.position_name == "root").first()
+    if not root_position:
+        root_position = user.UserPosition(position_name="root")
+        db.add(root_position)
+        db.commit()
+        db.refresh(root_position)
+    client_position = db.query(user.UserPosition).filter(user.UserPosition.position_name == "client").first()
+    if not client_position:
+        client_position = user.UserPosition(position_name="client")
+        db.add(client_position)
+        db.commit()
+        db.refresh(client_position)
     root_user = db.query(User).filter(User.email == "admin@gmail.com").first()
     if not root_user:
         admin = User(email="admin@gmail.com", hashed_password=pwd_context.hash("Admin@123"),
-                     user_role=user.UserRole.SUPPER_ADMIN, is_active=True)
+                     user_role=user.UserRole.SUPPER_ADMIN, is_active=True, user_position_id=root_position.id)
         db.add(admin)
         db.commit()
         db.refresh(admin)
+    db.close()
 
 
 origins = [
@@ -52,4 +66,5 @@ app.add_middleware(
 
 app.include_router(prefix="/api", router=auth)
 app.include_router(prefix="/api", router=user_route)
+app.include_router(prefix="/api", router=position)
 app.mount("/medias", StaticFiles(directory="medias"), name="medias")
