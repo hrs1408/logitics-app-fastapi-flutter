@@ -52,8 +52,12 @@ class User(Base):
     user_information = relationship("UserInformation", back_populates="user", uselist=False)
     user_address = relationship("UserAddress", back_populates="user", uselist=True)
     user_bank_account = relationship("UserBankAccount", back_populates="user", uselist=True)
-    pickup_voyages = relationship("Voyage", foreign_keys='Voyage.pickup_staff_id', back_populates="pickup_staff", uselist=True)
-    delivery_voyages = relationship("Voyage", foreign_keys='Voyage.delivery_staff_id', back_populates="delivery_staff", uselist=True)
+    pickup_voyages = relationship("Voyage", foreign_keys='Voyage.pickup_staff_id', back_populates="pickup_staff",
+                                  uselist=True)
+    delivery_voyages = relationship("Voyage", foreign_keys='Voyage.delivery_staff_id', back_populates="delivery_staff",
+                                    uselist=True)
+    timekeeping = relationship("Timekeeping", back_populates="user", uselist=True)
+
 
 class UserInformation(Base):
     __tablename__ = 'user_information'
@@ -84,6 +88,7 @@ class UserAddress(Base):
 
     user = relationship('User', back_populates='user_address')
     invoices = relationship("Invoice", back_populates="user_address", uselist=True)
+
 
 class UserBankAccount(Base):
     __tablename__ = 'user_bank_account'
