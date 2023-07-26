@@ -28,6 +28,9 @@ class MyApp extends StatelessWidget {
           PointerDeviceKind.unknown
         },
       ),
+      theme: ThemeData(
+        fontFamily: 'Gilroy',
+      ),
       debugShowCheckedModeBanner: false,
       getPages: Routes.routes,
     );

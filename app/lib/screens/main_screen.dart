@@ -10,6 +10,7 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Expanded(
               flex: 1,
@@ -18,7 +19,8 @@ class MainScreen extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Container(
-                  color: const Color(0xFF212332),
+                  height: MediaQuery.of(context).size.height,
+                  color: const Color(0XFF0E6EDFA),
                   child: const DashboardScreen()),
             )
           ],
