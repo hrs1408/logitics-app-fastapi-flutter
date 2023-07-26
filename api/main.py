@@ -8,12 +8,15 @@ from starlette.staticfiles import StaticFiles
 from database.database import engine
 from models import user, vehicle, branch, invoice, timekeeping
 from models.user import User
+from repositories.timekeeping_detail_route import timekeeping_detail_route
 from routes.auth_route import auth
 from routes.branch_route import branch_r
 from routes.headquarter_route import headquarter_route
 from routes.port_route import port_route
 from routes.position_route import position
+from routes.timekeeping_route import timekeeping_route
 from routes.user_route import user_route
+from routes.vehicle_route import vehicle_route
 from routes.warehouse_route import warehouse_route
 from schemas.schema import Route
 
@@ -79,4 +82,7 @@ app.include_router(prefix="/api", router=branch_r)
 app.include_router(prefix="/api", router=headquarter_route)
 app.include_router(prefix="/api", router=warehouse_route)
 app.include_router(prefix="/api", router=port_route)
+app.include_router(prefix="/api", router=vehicle_route)
+app.include_router(prefix="/api", router=timekeeping_route)
+app.include_router(prefix="/api", router=timekeeping_detail_route)
 app.mount("/medias", StaticFiles(directory="medias"), name="medias")

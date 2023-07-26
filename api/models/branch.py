@@ -21,12 +21,13 @@ class Branch(Base):
     warehouses = relationship("Warehouse", back_populates="branch", uselist=True)
     vehicles = relationship("Vehicle", back_populates="branch", uselist=True)
 
+
 class Headquarter(Base):
     __tablename__ = 'headquarters'
 
     id = Column(Integer, primary_key=True, index=True)
     headquarter_name = Column(String(255), nullable=False)
-    province = Column(String(255), nullable=False)
+    address = Column(String(255), nullable=False)
 
     branch_id = Column(Integer, ForeignKey('branches.id'), nullable=False)
 
@@ -39,7 +40,7 @@ class Warehouse(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     warehouse_name = Column(String(255), nullable=False)
-    province = Column(String(255), nullable=False)
+    address = Column(String(255), nullable=False)
 
     branch_id = Column(Integer, ForeignKey('branches.id'), nullable=False)
 
