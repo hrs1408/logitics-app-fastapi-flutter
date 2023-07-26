@@ -20,12 +20,12 @@ class InvoiceSchemaBase(BaseModel):
     show_goods: str
     requirement_other: str
     paided: bool
+    user_address_id: int
 
 
 class InvoiceSchema(InvoiceSchemaBase):
     id: int
     user_id: int
-    user_address_id: int
 
     class Config:
         orm_mode = True

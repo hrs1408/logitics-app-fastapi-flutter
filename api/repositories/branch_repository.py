@@ -44,8 +44,8 @@ class PortRepository(BaseRepository):
         return db.query(Port).filter(Port.port_name == name).first()
 
     @staticmethod
-    def find_by_type(db: Session, type_port):
-        return db.query(Port).filter(Port.type_port == type_port).all()
+    def find_by_type(db: Session, port_type):
+        return db.query(Port).filter(Port.port_type == port_type).all()
 
     @staticmethod
     def find_by_warehouse_id(db: Session, warehouse_id):

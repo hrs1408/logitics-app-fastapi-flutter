@@ -3,11 +3,14 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class BranchSchema(BaseModel):
+class PortBase(BaseModel):
+    port_name: str
+    type_port: str
+
+
+class PortSchema(PortBase):
     id: int
-    branch_name: str
-    province: str
-    headquarters: Optional[List['HeadquarterSchema']]
+    warehouse_id: int
 
     class Config:
         orm_mode = True
@@ -29,9 +32,10 @@ class HeadquarterSchema(HeadquarterBase):
 class WarehouseBase(BaseModel):
     warehouse_name: str
     address: str
+    ports: Optional[List[PortSchema]]
 
 
-class WarehouseCreateSchema(WarehouseBase):
+class WarehouseSchema(WarehouseBase):
     id: int
     branch_id: int
 
@@ -39,14 +43,11 @@ class WarehouseCreateSchema(WarehouseBase):
         orm_mode = True
 
 
-class PortBase(BaseModel):
-    port_name: str
-    type_port: str
-
-
-class PortSchema(PortBase):
+class BranchSchema(BaseModel):
     id: int
-    warehouse_id: int
+    branch_name: str
+    province: str
+    headquarters: Optional[List['HeadquarterSchema']]
 
     class Config:
         orm_mode = True

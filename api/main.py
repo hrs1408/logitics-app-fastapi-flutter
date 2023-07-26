@@ -9,8 +9,12 @@ from database.database import engine
 from models import user, vehicle, branch, invoice, timekeeping
 from models.user import User
 from routes.auth_route import auth
+from routes.branch_route import branch_r
+from routes.headquarter_route import headquarter_route
+from routes.port_route import port_route
 from routes.position_route import position
 from routes.user_route import user_route
+from routes.warehouse_route import warehouse_route
 from schemas.schema import Route
 
 user.Base.metadata.create_all(bind=engine)
@@ -71,4 +75,8 @@ app.add_middleware(
 app.include_router(prefix="/api", router=auth)
 app.include_router(prefix="/api", router=user_route)
 app.include_router(prefix="/api", router=position)
+app.include_router(prefix="/api", router=branch_r)
+app.include_router(prefix="/api", router=headquarter_route)
+app.include_router(prefix="/api", router=warehouse_route)
+app.include_router(prefix="/api", router=port_route)
 app.mount("/medias", StaticFiles(directory="medias"), name="medias")

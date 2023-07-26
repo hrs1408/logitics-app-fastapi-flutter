@@ -3,7 +3,7 @@ from typing import Optional, List
 from fastapi import HTTPException
 from pydantic import BaseModel, root_validator
 
-from schemas.timekeeping_schema import TimekeepingSchema
+# from schemas.timekeeping_schema import TimekeepingSchema
 
 
 class UserInformationBase(BaseModel):
@@ -63,7 +63,7 @@ class UserSchema(BaseModel):
     user_information: Optional[UserInformationSchema]
     user_address: Optional[List[UserAddressSchema]]
     user_bank_account: Optional[List[UserBankAccountSchema]]
-    timekeeping: Optional[List['TimekeepingSchema']]
+    # timekeeping: Optional[List['TimekeepingSchema']]
 
     class Config:
         orm_mode = True
