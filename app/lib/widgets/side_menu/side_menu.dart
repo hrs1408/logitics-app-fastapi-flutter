@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../screens/login/login_screen.dart';
+
 class SideMenu extends StatelessWidget {
   const SideMenu({super.key});
 
@@ -9,7 +11,7 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Color(0XFF1B2339),
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
@@ -22,36 +24,58 @@ class SideMenu extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            DrawerHeader(
+            const DrawerHeader(
               child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Image.network(
-                    'https://media.loveitopcdn.com/3807/logo-cong-ty-its-logistics-compressed.jpg'),
+                padding: EdgeInsets.all(20),
+                child: Center(
+                  child: Text('Logistics ',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.w700)),
+                ),
               ),
             ),
             buildListTile(
-                'Tổng Quan', const FaIcon(FontAwesomeIcons.solidChartBar)),
+                'Tổng Quan',
+                const FaIcon(FontAwesomeIcons.solidChartBar,
+                    color: Colors.white),
+                () {}),
             buildListTile(
-                'Quản Lý Người Dùng', const FaIcon(FontAwesomeIcons.userAlt)),
+                'Quản Lý Người Dùng',
+                const FaIcon(FontAwesomeIcons.userAlt, color: Colors.white),
+                () {}),
+            buildListTile('Quản Lý Đơn Hàng',
+                const FaIcon(FontAwesomeIcons.box, color: Colors.white), () {}),
             buildListTile(
-                'Quản Lý Đơn Hàng', const FaIcon(FontAwesomeIcons.box)),
+                'Quản Lý Kho Hàng',
+                const FaIcon(FontAwesomeIcons.warehouse, color: Colors.white),
+                () {}),
             buildListTile(
-                'Quản Lý Kho Hàng', const FaIcon(FontAwesomeIcons.warehouse)),
+                'Quản Lý Đối Tác',
+                const FaIcon(FontAwesomeIcons.handshake, color: Colors.white),
+                () {}),
             buildListTile(
-                'Quản Lý Đối Tác', const FaIcon(FontAwesomeIcons.handshake)),
-            buildListTile('Quản Lý Báo Cáo',
-                const FaIcon(FontAwesomeIcons.fileInvoiceDollar)),
+                'Quản Lý Báo Cáo',
+                const FaIcon(FontAwesomeIcons.fileInvoiceDollar,
+                    color: Colors.white),
+                () {}),
             buildListTile(
-                'Quản Lý Hệ Thống', const FaIcon(FontAwesomeIcons.cogs)),
-            buildListTile(
-                'Đăng Xuất', const FaIcon(FontAwesomeIcons.signOutAlt)),
+                'Quản Lý Hệ Thống',
+                const FaIcon(FontAwesomeIcons.cogs, color: Colors.white),
+                () {}),
+            buildListTile('Đăng Xuất',
+                const FaIcon(FontAwesomeIcons.signOutAlt, color: Colors.white),
+                () {
+              Get.toNamed('/login');
+            }),
           ],
         ),
       ),
     );
   }
 
-  ListTile buildListTile(String title, FaIcon icon) {
+  ListTile buildListTile(String title, FaIcon icon, Function onTap) {
     return ListTile(
       horizontalTitleGap: 10,
       contentPadding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -59,14 +83,10 @@ class SideMenu extends StatelessWidget {
       title: Text(
         title,
         style:
-            const TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
       ),
       onTap: () {
-        Get.snackbar('Xin chào', 'Bạn đã chọn $title',
-            snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.black45,
-            colorText: Colors.white,
-            margin: const EdgeInsets.all(20));
+        onTap();
       },
     );
   }

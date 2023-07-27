@@ -1,8 +1,17 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
-import '../../widgets/chart.dart';
+import '../../widgets/chart/line_chart.dart';
+import '../../widgets/chart/pie_chart.dart';
+import '../../widgets/chart/total_cod_chart.dart';
+
+final List<String> imgList = [
+  'https://mekongsoft.com.vn/assets/images/tintuc/845822162f998f1fe08e66b65c683aaf.jpg',
+  'https://vimc.co/wp-content/uploads/2019/01/logistic-15413508476761205026565-0-5-320-575-crop-1541350855830863448122.jpg',
+  'https://tuyensinh.cdtm.edu.vn/wp-content/uploads/2020/08/Logistics.jpg',
+  'https://shipsy.io/wp-content/uploads/2022/10/Frame-1-4.png',
+];
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -23,13 +32,14 @@ class DashboardScreen extends StatelessWidget {
                       const Text(
                         'Hello Kruluz Utsman',
                         style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                       const SizedBox(height: 5),
                       Text(
-                          '${DateTime.now().hour} : ${DateTime.now().minute} | ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}')
+                          '${DateTime.now().hour} : ${DateTime.now().minute} | ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                          style: const TextStyle(color: Colors.white))
                     ],
                   ),
                   const Spacer(),
@@ -93,7 +103,7 @@ class DashboardScreen extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black),
+                                  color: Colors.white),
                             ),
                             SizedBox(width: 10),
                             CircleAvatar(
@@ -111,10 +121,38 @@ class DashboardScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  buildBoxDashboard(context),
-                  buildBoxDashboard(context),
-                  buildBoxDashboard(context),
-                  buildBoxDashboard(context),
+                  buildBoxDashboard(
+                      context,
+                      const FaIcon(FontAwesomeIcons.fileInvoice,
+                          color: Colors.white, size: 30),
+                      'Tổng số đơn COD',
+                      '1825',
+                      Colors.green,
+                      true),
+                  buildBoxDashboard(
+                      context,
+                      const FaIcon(FontAwesomeIcons.wallet,
+                          color: Colors.white, size: 30),
+                      'Tổng COD đã thu',
+                      '985',
+                      Colors.yellow,
+                      false),
+                  buildBoxDashboard(
+                      context,
+                      const FaIcon(FontAwesomeIcons.moneyBill,
+                          color: Colors.white, size: 30),
+                      'Tổng cước phí',
+                      '5.275.000',
+                      Colors.blueAccent,
+                      true),
+                  buildBoxDashboard(
+                      context,
+                      const FaIcon(FontAwesomeIcons.sackDollar,
+                          color: Colors.white, size: 30),
+                      'Tổng COD còn lại',
+                      '840',
+                      Colors.cyan,
+                      false),
                 ],
               ),
               const SizedBox(height: 20),
@@ -125,7 +163,7 @@ class DashboardScreen extends StatelessWidget {
                     width: (MediaQuery.of(context).size.width - 60) / 1.6,
                     height: 435,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: const Color(0XFF1B2339),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: const [
                         BoxShadow(
@@ -135,23 +173,53 @@ class DashboardScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    child:  const LineChartSample1(),
+                    child: const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('Tổng số đơn',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)),
+                          LineChartSample2()
+                        ],
+                      ),
+                    ),
                   ),
                   Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 5,
-                    height: 435,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 5,
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                    ),
-                  ),
+                      width: (MediaQuery.of(context).size.width - 60) / 5,
+                      height: 435,
+                      decoration: BoxDecoration(
+                        color: const Color(0XFF1B2339),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 5,
+                            offset: Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Tình trạng thanh toán COD',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                child: TotalCodChart(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
                 ],
               ),
               const SizedBox(height: 20),
@@ -162,7 +230,7 @@ class DashboardScreen extends StatelessWidget {
                     width: (MediaQuery.of(context).size.width - 60) / 1.6,
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: const Color(0XFF1B2339),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: const [
                         BoxShadow(
@@ -177,7 +245,7 @@ class DashboardScreen extends StatelessWidget {
                     width: (MediaQuery.of(context).size.width - 60) / 5,
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: const Color(0XFF1B2339),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: const [
                         BoxShadow(
@@ -186,6 +254,31 @@ class DashboardScreen extends StatelessWidget {
                           offset: Offset(0, 2),
                         )
                       ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                            autoPlay: true,
+                            aspectRatio: 2.0,
+                            enlargeCenterPage: true,
+                            enlargeStrategy: CenterPageEnlargeStrategy.height,
+                            viewportFraction: 1.0
+                        ),
+                        items: imgList
+                            .map(
+                              (item) => Container(
+                                child: Center(
+                                  child: Image(
+                                    image: NetworkImage(item),
+                                    fit: BoxFit.cover,
+                                    width: 1000,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
                   ),
                 ],
@@ -197,12 +290,13 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Container buildBoxDashboard(BuildContext context) {
+  Container buildBoxDashboard(BuildContext context, FaIcon icon, String title,
+      String value, Color bgColor, bool down) {
     return Container(
       width: (MediaQuery.of(context).size.width - 60) / 5,
       height: 200,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0XFF1B2339),
         borderRadius: BorderRadius.circular(10),
         boxShadow: const [
           BoxShadow(
@@ -221,73 +315,54 @@ class DashboardScreen extends StatelessWidget {
               children: [
                 Container(
                   width: 50,
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
+                  decoration: BoxDecoration(
+                    color: bgColor,
                     shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   padding: const EdgeInsets.all(10),
-                  child: const Center(
-                    child: FaIcon(
-                      FontAwesomeIcons.userAlt,
-                      color: Colors.white,
-                    ),
+                  child: Center(
+                    child: icon,
                   ),
                 ),
                 const Spacer(),
-                const Text('Tổng số đơn',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(title,
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
                 const SizedBox(height: 10),
-                const Text('1000',
-                    style:
-                        TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                Text(value,
+                    style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
                 const Spacer(),
-                const Row(
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    FaIcon(FontAwesomeIcons.arrowUp, color: Colors.green),
-                    SizedBox(width: 5),
-                    Text('10%')
+                    down
+                        ? const FaIcon(FontAwesomeIcons.arrowDown,
+                            color: Colors.red)
+                        : const FaIcon(FontAwesomeIcons.arrowUp,
+                            color: Colors.green),
+                    const SizedBox(width: 5),
+                    const Text(
+                      '10%',
+                      style: TextStyle(color: Colors.white),
+                    )
                   ],
                 )
               ],
             ),
             const Spacer(),
-            SizedBox(
-              width: 150,
-              height: 150,
-              child: PieChart(
-                PieChartData(
-                  sections: [
-                    PieChartSectionData(
-                      color: Colors.green,
-                      value: 20,
-                      showTitle: false,
-                      radius: 25,
-                    ),
-                    PieChartSectionData(
-                      color: Colors.red,
-                      value: 40,
-                      showTitle: false,
-                      radius: 25,
-                    ),
-                    PieChartSectionData(
-                      color: Colors.blue,
-                      value: 10,
-                      showTitle: false,
-                      radius: 25,
-                    ),
-                    PieChartSectionData(
-                      color: Colors.yellow,
-                      value: 25,
-                      showTitle: false,
-                      radius: 25,
-                    ),
-                  ],
-                ),
-              ),
-            )
+            const Spacer(),
+            const SizedBox(
+              width: 100,
+              height: 100,
+              child: PieChartSample3(),
+            ),
+            const Spacer(),
           ],
         ),
       ),

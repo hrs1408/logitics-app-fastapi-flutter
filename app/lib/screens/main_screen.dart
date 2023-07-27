@@ -13,14 +13,14 @@ class MainScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Expanded(
-              flex: 1,
+              flex: 2,
               child: SideMenu(),
             ),
             Expanded(
-              flex: 5,
+              flex: 10,
               child: Container(
                   height: MediaQuery.of(context).size.height,
-                  color: const Color(0XFF0E6EDFA),
+                  color: const Color(0XFF282E45),
                   child: const DashboardScreen()),
             )
           ],
