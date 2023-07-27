@@ -1,3 +1,4 @@
+import 'package:app/resources/screen_responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -24,31 +25,50 @@ class SideMenu extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Center(
-                  child: Text('Logistics ',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 40,
-                          fontWeight: FontWeight.w700)),
-                ),
+                padding: const EdgeInsets.all(20),
+                child: ScreenResponsive.isTablet(context) || ScreenResponsive.isMobile(context)
+                    ? Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Logistics ',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.w700)),
+                            IconButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                ))
+                          ],
+                        ),
+                      )
+                    : const Center(
+                        child: Text('Logistics ',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 40,
+                                fontWeight: FontWeight.w700)),
+                      ),
               ),
             ),
             buildListTile(
                 'Tổng Quan',
                 const FaIcon(FontAwesomeIcons.solidChartBar,
-                    color: Colors.white),
-                () {
-                  onTap(0);
-                }),
-            buildListTile(
-                'Quản Lý Người Dùng',
+                    color: Colors.white), () {
+              onTap(0);
+            }),
+            buildListTile('Quản Lý Người Dùng',
                 const FaIcon(FontAwesomeIcons.userAlt, color: Colors.white),
                 () {
-                  onTap(1);
-                }),
+              onTap(1);
+            }),
             buildListTile('Quản Lý Đơn Hàng',
                 const FaIcon(FontAwesomeIcons.box, color: Colors.white), () {}),
             buildListTile(

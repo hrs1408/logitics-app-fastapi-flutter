@@ -5,26 +5,31 @@ import 'package:app/widgets/side_menu/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/drawer_controler.dart';
+
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     RxInt selectedIndex = 0.obs;
-
+    DrawerControllerE drawerControllerE = Get.put(DrawerControllerE());
     void onItemTapped(int index) {
       selectedIndex.value = index;
     }
 
     return Scaffold(
+      key: drawerControllerE.scaffoldKey,
+      drawer: SideMenu(onTap: onItemTapped),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (ScreenResponsive.isDesktop(context))Expanded(
-              flex: 2,
-              child: SideMenu(onTap: onItemTapped),
-            ),
+            if (ScreenResponsive.isDesktop(context))
+              Expanded(
+                flex: 2,
+                child: SideMenu(onTap: onItemTapped),
+              ),
             Expanded(
               flex: 10,
               child: Container(

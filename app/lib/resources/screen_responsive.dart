@@ -13,22 +13,22 @@ class ScreenResponsive extends StatelessWidget {
   });
 
   static bool isMobile(BuildContext context) =>
-      MediaQuery.of(context).size.width < 850;
+      MediaQuery.of(context).size.width < 750;
 
   static bool isTablet(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 850 &&
-      MediaQuery.of(context).size.width < 1400;
+      MediaQuery.of(context).size.width >= 750 &&
+      MediaQuery.of(context).size.width <= 1500;
 
   static bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 1400;
+      MediaQuery.of(context).size.width > 1500;
 
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
 
-    if (_size.width >= 1100) {
+    if (_size.width > 1500) {
       return desktop;
-    } else if (_size.width >= 850 && tablet != null) {
+    } else if (_size.width >= 751 && _size.width <= 1500) {
       return tablet;
     } else {
       return mobile;
