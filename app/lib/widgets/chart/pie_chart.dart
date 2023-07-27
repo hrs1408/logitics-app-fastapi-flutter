@@ -50,7 +50,7 @@ class PieChartSample3State extends State {
     return List.generate(4, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
-      final radius = isTouched ? 70.0 : 70.0;
+      final radius = isTouched ? 80.0 : 70.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
       switch (i) {
@@ -116,4 +116,3 @@ class PieChartSample3State extends State {
     });
   }
 }
-

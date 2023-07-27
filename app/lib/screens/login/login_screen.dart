@@ -181,43 +181,45 @@ class LoginScreen extends StatelessWidget {
 
   Obx buildInput(bool isPassword, String hintText, IconData iconData,
       {required RxDouble width}) {
-    return Obx(() => Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: width < 500 ? 20 : 50, vertical: 15),
-          child: TextField(
-            obscureText: isPassword,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              prefixIcon: iconData != null
-                  ? Icon(
-                      iconData,
-                      color: Colors.white,
-                    )
-                  : null,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 25, horizontal: 30),
-              hintText: hintText,
-              hintStyle: const TextStyle(color: Colors.white),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(
-                  color: Colors.white,
-                ),
+    return Obx(
+      () => Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: width < 500 ? 20 : 50, vertical: 15),
+        child: TextField(
+          obscureText: isPassword,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            prefixIcon: iconData != null
+                ? Icon(
+                    iconData,
+                    color: Colors.white,
+                  )
+                : null,
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 25, horizontal: 30),
+            hintText: hintText,
+            hintStyle: const TextStyle(color: Colors.white),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Colors.white,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(
-                  color: Colors.white,
-                ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Colors.white,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(
-                  color: Colors.white,
-                ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: Colors.white,
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

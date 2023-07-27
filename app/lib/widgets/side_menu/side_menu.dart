@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../screens/login/login_screen.dart';
-
 class SideMenu extends StatelessWidget {
-  const SideMenu({super.key});
+  final Function onTap;
+
+  const SideMenu({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +40,15 @@ class SideMenu extends StatelessWidget {
                 'Tổng Quan',
                 const FaIcon(FontAwesomeIcons.solidChartBar,
                     color: Colors.white),
-                () {}),
+                () {
+                  onTap(0);
+                }),
             buildListTile(
                 'Quản Lý Người Dùng',
                 const FaIcon(FontAwesomeIcons.userAlt, color: Colors.white),
-                () {}),
+                () {
+                  onTap(1);
+                }),
             buildListTile('Quản Lý Đơn Hàng',
                 const FaIcon(FontAwesomeIcons.box, color: Colors.white), () {}),
             buildListTile(

@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import '../../widgets/chart/line_chart.dart';
 import '../../widgets/chart/pie_chart.dart';
 import '../../widgets/chart/total_cod_chart.dart';
+import '../../widgets/table/invoice_table.dart';
 
 final List<String> imgList = [
   'https://mekongsoft.com.vn/assets/images/tintuc/845822162f998f1fe08e66b65c683aaf.jpg',
@@ -240,6 +241,7 @@ class DashboardScreen extends StatelessWidget {
                         )
                       ],
                     ),
+                    child: const InvoiceTable(),
                   ),
                   Container(
                     width: (MediaQuery.of(context).size.width - 60) / 5,
@@ -256,23 +258,22 @@ class DashboardScreen extends StatelessWidget {
                       ],
                     ),
                     child: Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: CarouselSlider(
                         options: CarouselOptions(
                             autoPlay: true,
                             aspectRatio: 2.0,
                             enlargeCenterPage: true,
                             enlargeStrategy: CenterPageEnlargeStrategy.height,
-                            viewportFraction: 1.0
-                        ),
+                            viewportFraction: 1.0),
                         items: imgList
                             .map(
                               (item) => Container(
-                                child: Center(
-                                  child: Image(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
                                     image: NetworkImage(item),
                                     fit: BoxFit.cover,
-                                    width: 1000,
                                   ),
                                 ),
                               ),

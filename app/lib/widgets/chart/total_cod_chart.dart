@@ -51,9 +51,8 @@ class TotalCodChartState extends State {
               ),
             ),
           ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          const Wrap(
+            spacing: 8,
             children: <Widget>[
               Indicator(
                 color: AppColors.contentColorBlue,
@@ -61,17 +60,11 @@ class TotalCodChartState extends State {
                 isSquare: true,
                 textColor: Colors.white,
               ),
-              SizedBox(
-                height: 4,
-              ),
               Indicator(
                 color: AppColors.contentColorYellow,
                 text: 'Chưa thanh toán',
                 isSquare: true,
                 textColor: Colors.white,
-              ),
-              SizedBox(
-                height: 18,
               ),
             ],
           ),
