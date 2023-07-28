@@ -109,7 +109,7 @@ class RegisterScreen extends StatelessWidget {
                       left: 10,
                       child: IconButton(
                         onPressed: () {
-                          Get.back();
+                          Get.toNamed('/home');
                         },
                         icon: const Icon(
                           Icons.arrow_back_ios,

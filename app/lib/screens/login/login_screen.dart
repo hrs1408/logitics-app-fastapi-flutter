@@ -1,3 +1,4 @@
+import 'package:app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +8,13 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     RxDouble width = MediaQuery.of(context).size.width.obs;
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    AuthController authController = Get.put(AuthController());
+    void handleLogin() {
+      authController.login(
+          emailController.text.trim(), passwordController.text);
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -44,93 +52,95 @@ class LoginScreen extends StatelessWidget {
                           const SizedBox(
                             height: 25,
                           ),
-                          buildInput(false, 'Email', Icons.email, width: width),
+                          buildInput(false, 'Email', Icons.email,
+                              width: width, controller: emailController),
                           buildInput(true, 'Mật khẩu', Icons.lock,
-                              width: width),
+                              width: width, controller: passwordController),
                           const SizedBox(
                             height: 25,
                           ),
-                          Obx(() => Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: width < 500 ? 20 : 50),
-                                child: Column(children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {},
-                                        child: const Text(
-                                          'Quên mật khẩu?',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                      const Row(
-                                        children: [
-                                          Text(
-                                            'Lưu mật khẩu',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Icon(
-                                            Icons.check_box,
-                                            color: Colors.white,
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 25,
-                                  ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 50,
-                                    child: ElevatedButton(
+                          Obx(
+                            () => Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: width < 500 ? 20 : 50),
+                              child: Column(children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextButton(
                                       onPressed: () {},
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0XFF2B5DFF),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                      ),
                                       child: const Text(
-                                        'Đăng Nhập',
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 25,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text(
-                                        'Bạn chưa có tài khoản?',
+                                        'Quên mật khẩu?',
                                         style: TextStyle(color: Colors.white),
                                       ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Get.toNamed('/register');
-                                        },
-                                        child: const Text(
-                                          'Đăng ký',
-                                          style: TextStyle(
-                                              color: Color(0XFF2B5DFF),
-                                              fontWeight: FontWeight.w700),
+                                    ),
+                                    const Row(
+                                      children: [
+                                        Text(
+                                          'Lưu mật khẩu',
+                                          style: TextStyle(color: Colors.white),
                                         ),
-                                      )
-                                    ],
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Icon(
+                                          Icons.check_box,
+                                          color: Colors.white,
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 25,
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      handleLogin();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0XFF2B5DFF),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'Đăng Nhập',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.white),
+                                    ),
                                   ),
-                                ]),
-                              ))
+                                ),
+                                const SizedBox(
+                                  height: 25,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Bạn chưa có tài khoản?',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Get.toNamed('/register');
+                                      },
+                                      child: const Text(
+                                        'Đăng ký',
+                                        style: TextStyle(
+                                            color: Color(0XFF2B5DFF),
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ]),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -139,7 +149,7 @@ class LoginScreen extends StatelessWidget {
                       left: 10,
                       child: IconButton(
                         onPressed: () {
-                          Get.back();
+                          Get.toNamed('/home');
                         },
                         icon: const Icon(
                           Icons.arrow_back_ios,
@@ -180,12 +190,13 @@ class LoginScreen extends StatelessWidget {
   }
 
   Obx buildInput(bool isPassword, String hintText, IconData iconData,
-      {required RxDouble width}) {
+      {required RxDouble width, required TextEditingController controller}) {
     return Obx(
       () => Padding(
         padding: EdgeInsets.symmetric(
             horizontal: width < 500 ? 20 : 50, vertical: 15),
         child: TextField(
+          controller: controller,
           obscureText: isPassword,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(

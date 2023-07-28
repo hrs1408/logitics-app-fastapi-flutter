@@ -5,7 +5,7 @@ import 'package:app/widgets/side_menu/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/drawer_controler.dart';
+import '../controllers/drawer_controller.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});

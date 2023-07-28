@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../resources/screen_responsive.dart';
-import '../../widgets/table/invoice_table.dart';
+import '../../widgets/table/user_table.dart';
 import 'banner_slicer_widget.dart';
 
 class BottomTable extends StatelessWidget {

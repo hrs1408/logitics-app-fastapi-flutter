@@ -1,12 +1,16 @@
-import 'package:app/controllers/drawer_controler.dart';
+import 'package:app/controllers/auth_controller.dart';
+import 'package:app/controllers/drawer_controller.dart';
 import 'package:app/resources/screen_responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class HeaderDashboard extends StatelessWidget {
+  final String title;
+
   const HeaderDashboard({
     super.key,
+    required this.title,
   });
 
   @override
@@ -24,6 +28,7 @@ class HeaderDashboard extends StatelessWidget {
   }
 
   Row buildHeaderRight(BuildContext context) {
+    AuthController authController = Get.put(AuthController());
     if (ScreenResponsive.isMobile(context)) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -62,17 +67,19 @@ class HeaderDashboard extends StatelessWidget {
         const SizedBox(width: 10),
         TextButton(
           onPressed: () {},
-          child: const Row(
+          child: Row(
             children: [
-              Text(
-                'Kruluz Utsman',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+              Obx(
+                () => Text(
+                  authController.userLogin.value!.userInformation.fullName,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
               ),
-              SizedBox(width: 10),
-              CircleAvatar(
+              const SizedBox(width: 10),
+              const CircleAvatar(
                 backgroundImage: NetworkImage(
                     'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000'),
               )
@@ -121,6 +128,7 @@ class HeaderDashboard extends StatelessWidget {
   }
 
   Column buildHeaderLeft(BuildContext context) {
+    AuthController authController = Get.put(AuthController());
     DrawerControllerE drawerControllerE = Get.put(DrawerControllerE());
     if (ScreenResponsive.isMobile(context)) {
       return Column(
@@ -135,9 +143,9 @@ class HeaderDashboard extends StatelessWidget {
                   icon:
                       const FaIcon(FontAwesomeIcons.bars, color: Colors.white)),
               const SizedBox(width: 10),
-              const Text(
-                'Dashboard',
-                style: TextStyle(
+              Text(
+                title,
+                style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
@@ -156,17 +164,19 @@ class HeaderDashboard extends StatelessWidget {
                     drawerControllerE.scaffoldKey.currentState!.openDrawer();
                   },
                   icon:
-                  const FaIcon(FontAwesomeIcons.bars, color: Colors.white)),
+                      const FaIcon(FontAwesomeIcons.bars, color: Colors.white)),
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Hello Kruluz Utsman',
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                  Obx(
+                    () => Text(
+                      'Hello ${authController.userLogin.value!.userInformation.fullName}',
+                      style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
                   ),
                   const SizedBox(height: 5),
                   Text(
@@ -182,10 +192,12 @@ class HeaderDashboard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Hello Kruluz Utsman',
-          style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+        Obx(
+          () => Text(
+            'Hello ${authController.userLogin.value!.userInformation.fullName}',
+            style: const TextStyle(
+                fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
         ),
         const SizedBox(height: 5),
         Text(

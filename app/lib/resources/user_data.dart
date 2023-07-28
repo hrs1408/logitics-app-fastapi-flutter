@@ -1,17 +1,28 @@
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:flutter/material.dart';
-import '../models/employee.dart';
 
-class EmployeeDataSource extends DataGridSource {
-  EmployeeDataSource({required List<Employee> employees}) {
-    dataGridRows = employees
+import '../models/user.dart';
+
+class UserDataSource extends DataGridSource {
+  UserDataSource({required List<User> users}) {
+    dataGridRows = users
         .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
               DataGridCell<int>(columnName: 'id', value: dataGridRow.id),
-              DataGridCell<String>(columnName: 'name', value: dataGridRow.name),
               DataGridCell<String>(
-                  columnName: 'designation', value: dataGridRow.designation),
-              DataGridCell<int>(
-                  columnName: 'salary', value: dataGridRow.salary),
+                  columnName: 'email', value: dataGridRow.email),
+              DataGridCell<String>(
+                columnName: 'role',
+                value: dataGridRow.userRole == 'supper_admin'
+                    ? 'Quản trị hệ thống'
+                    : dataGridRow.userRole == 'admin'
+                        ? 'Quản trị viên'
+                        : dataGridRow.userRole == 'manager'
+                            ? 'Nhân viên'
+                            : 'Khách hàng',
+              ),
+              DataGridCell<String>(
+                  columnName: 'full_name',
+                  value: dataGridRow.userInformation.fullName),
             ]))
         .toList();
   }
@@ -26,8 +37,7 @@ class EmployeeDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment: (dataGridCell.columnName == 'id' ||
-                  dataGridCell.columnName == 'salary')
+          alignment: (dataGridCell.columnName == 'id')
               ? Alignment.centerRight
               : Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),

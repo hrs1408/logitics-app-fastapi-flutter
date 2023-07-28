@@ -1,12 +1,24 @@
+import 'package:app/controllers/auth_controller.dart';
 import 'package:app/resources/screen_responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../routes/routes.dart';
 
 class SideMenu extends StatelessWidget {
   final Function onTap;
 
   const SideMenu({super.key, required this.onTap});
+
+  void handleLogout() {
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.remove('access_token');
+    });
+    AuthController().isLogin.value = false;
+    Get.offAllNamed('/login');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +40,8 @@ class SideMenu extends StatelessWidget {
             DrawerHeader(
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: ScreenResponsive.isTablet(context) || ScreenResponsive.isMobile(context)
+                child: ScreenResponsive.isTablet(context) ||
+                        ScreenResponsive.isMobile(context)
                     ? Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,7 +104,7 @@ class SideMenu extends StatelessWidget {
             buildListTile('Đăng Xuất',
                 const FaIcon(FontAwesomeIcons.signOutAlt, color: Colors.white),
                 () {
-              Get.toNamed('/login');
+              handleLogout();
             }),
           ],
         ),
