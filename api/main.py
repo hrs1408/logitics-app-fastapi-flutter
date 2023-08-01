@@ -45,6 +45,30 @@ def start_up_event():
         db.add(root_position)
         db.commit()
         db.refresh(root_position)
+    manager_position = db.query(user.UserPosition).filter(user.UserPosition.position_name == "manager").first()
+    if not manager_position:
+        manager_position = user.UserPosition(position_name="manager")
+        db.add(manager_position)
+        db.commit()
+        db.refresh(manager_position)
+    warehouse_position = db.query(user.UserPosition).filter(user.UserPosition.position_name == "warehouse").first()
+    if not warehouse_position:
+        warehouse_position = user.UserPosition(position_name="warehouse")
+        db.add(warehouse_position)
+        db.commit()
+        db.refresh(warehouse_position)
+    driver_position = db.query(user.UserPosition).filter(user.UserPosition.position_name == "driver").first()
+    if not driver_position:
+        driver_position = user.UserPosition(position_name="driver")
+        db.add(driver_position)
+        db.commit()
+        db.refresh(driver_position)
+    delivery_position = db.query(user.UserPosition).filter(user.UserPosition.position_name == "delivery").first()
+    if not delivery_position:
+        delivery_position = user.UserPosition(position_name="delivery")
+        db.add(delivery_position)
+        db.commit()
+        db.refresh(delivery_position)
     client_position = db.query(user.UserPosition).filter(user.UserPosition.position_name == "client").first()
     if not client_position:
         client_position = user.UserPosition(position_name="client")
@@ -55,16 +79,21 @@ def start_up_event():
     if not root_user:
         admin = User(email="admin@gmail.com", hashed_password=pwd_context.hash("Admin@123"),
                      user_role=user.UserRole.SUPPER_ADMIN, is_active=True, user_position_id=root_position.id)
+        adminInfo = user.UserInformation(full_name="Admin")
         db.add(admin)
         db.commit()
         db.refresh(admin)
+        adminInfo.user_id = admin.id
+        db.add(adminInfo)
+        db.commit()
+        db.refresh(adminInfo)
     db.close()
 
 
 origins = [
     "http://localhost.tiangolo.com",
     "https://localhost.tiangolo.com",
-    "http://localhost:3000",
+    "http://localhost:3030",
 ]
 
 app.add_middleware(
