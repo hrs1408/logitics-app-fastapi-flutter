@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -13,7 +15,7 @@ from ultis.security import get_current_user
 position = APIRouter(prefix="/position", tags=["Position"])
 
 
-@position.get("/", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[UserPositionSchema])
+@position.get("/", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[List[UserPositionSchema]])
 def get_all_position(id: int = Depends(get_current_user), db: Session = Depends(get_db)):
     check_permission_role_supper_admin(id=id, db=db)
     positions = UserPositionRepository.find_all(db, UserPosition)

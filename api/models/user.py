@@ -39,7 +39,7 @@ class User(Base):
     email = Column(String(255), unique=True, index=True)
     hashed_password = Column(String(255))
     user_role = Column(String(255), default=UserRole.CLIENT, nullable=False)
-    user_position_id = Column(Integer, ForeignKey('user_position.id'), default=2)
+    user_position_id = Column(Integer, ForeignKey('user_position.id'), default=6)
     branch_id = Column(Integer, ForeignKey('branches.id'), nullable=True)
     vehicle_id = Column(Integer, ForeignKey('vehicles.id'), nullable=True)
     is_active = Column(String(255), default=True, nullable=False)

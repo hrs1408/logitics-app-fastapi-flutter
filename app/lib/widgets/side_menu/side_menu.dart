@@ -5,8 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../routes/routes.dart';
-
 class SideMenu extends StatelessWidget {
   final Function onTap;
 

@@ -53,6 +53,7 @@ class UserBankAccountSchema(UserBankAccountBase):
 
 
 class UserSchema(BaseModel):
+    id: int
     email: str
     hashed_password: str
     user_role: str

@@ -7,7 +7,10 @@ class UserDataSource extends DataGridSource {
   UserDataSource({required List<User> users}) {
     dataGridRows = users
         .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
-              DataGridCell<int>(columnName: 'id', value: dataGridRow.id),
+              DataGridCell<int>(
+                columnName: 'id',
+                value: dataGridRow.id,
+              ),
               DataGridCell<String>(
                   columnName: 'email', value: dataGridRow.email),
               DataGridCell<String>(
@@ -38,7 +41,7 @@ class UserDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
           alignment: (dataGridCell.columnName == 'id')
-              ? Alignment.centerRight
+              ? Alignment.center
               : Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(

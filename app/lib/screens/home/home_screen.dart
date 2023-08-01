@@ -1,5 +1,6 @@
 import 'package:app/screens/home/carousel_banner_widget.dart';
 import 'package:app/screens/home/delivery_service_widget.dart';
+import 'package:app/screens/home/footer_widget.dart';
 import 'package:app/screens/home/home_header_widget.dart';
 import 'package:app/screens/home/mode_of_operation.dart';
 import 'package:app/screens/home/navbar_widget.dart';
@@ -22,7 +23,8 @@ class HomeScreen extends StatelessWidget {
             Navbar(),
             CarouselBanner(),
             DeliveryService(),
-            ModeOfOperation()
+            ModeOfOperation(),
+            Footer()
           ],
         ),
       )),
