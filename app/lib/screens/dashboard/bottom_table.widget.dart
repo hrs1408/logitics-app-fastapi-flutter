@@ -31,7 +31,7 @@ class BottomTable extends StatelessWidget {
                 )
               ],
             ),
-            child: const InvoiceTable(),
+            child: const UserTable(),
           ),
           const BannerSlider(
             height: 200,
@@ -58,7 +58,7 @@ class BottomTable extends StatelessWidget {
               )
             ],
           ),
-          child: const InvoiceTable(),
+          child: const UserTable(),
         ),
       ],
     );

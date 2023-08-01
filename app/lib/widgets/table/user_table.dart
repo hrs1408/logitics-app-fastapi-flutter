@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
-class InvoiceTable extends StatelessWidget {
-  const InvoiceTable({super.key});
+class UserTable extends StatelessWidget {
+  const UserTable({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,57 +20,59 @@ class InvoiceTable extends StatelessWidget {
           filterIconColor: Colors.white,
           sortIconColor: Colors.white,
         ),
-        child: Obx(() => SfDataGrid(
-              columnWidthMode: ColumnWidthMode.fill,
-              columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-              source: userController.userDataSource.value,
-              allowSorting: true,
-              allowMultiColumnSorting: true,
-              columns: [
-                GridColumn(
-                    columnName: 'id',
-                    label: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        alignment: Alignment.centerRight,
-                        child: const Text(
-                          'ID',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.white),
-                        ))),
-                GridColumn(
-                    columnName: 'email',
-                    label: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        alignment: Alignment.centerLeft,
-                        child: const Text(
-                          'Email',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.white),
-                        ))),
-                GridColumn(
-                    columnName: 'role',
-                    label: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        alignment: Alignment.centerLeft,
-                        child: const Text(
-                          'Vai trò',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.white),
-                        ))),
-                GridColumn(
-                  columnName: 'full_name',
+        child: Obx(
+          () => SfDataGrid(
+            columnWidthMode: ColumnWidthMode.fill,
+            columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+            source: userController.userDataSource.value,
+            allowSorting: true,
+            allowMultiColumnSorting: true,
+            columns: [
+              GridColumn(
+                  width: 100,
+                  columnName: 'id',
                   label: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    alignment: Alignment.centerRight,
-                    child: const Text(
-                      'Họ và tên',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white),
-                    ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerRight,
+                      child: const Text(
+                        'ID',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white),
+                      ))),
+              GridColumn(
+                  columnName: 'email',
+                  label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        'Email',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white),
+                      ))),
+              GridColumn(
+                  columnName: 'role',
+                  label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        'Vai trò',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white),
+                      ))),
+              GridColumn(
+                columnName: 'full_name',
+                label: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: const Text(
+                    'Họ và tên',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

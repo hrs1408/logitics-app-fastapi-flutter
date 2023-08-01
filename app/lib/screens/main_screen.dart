@@ -1,6 +1,5 @@
+import 'package:app/controllers/tab_controller.dart';
 import 'package:app/resources/screen_responsive.dart';
-import 'package:app/screens/dashboard/dash_board_screen.dart';
-import 'package:app/screens/user_manager/user_manager_screen.dart';
 import 'package:app/widgets/side_menu/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,15 +11,12 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RxInt selectedIndex = 0.obs;
     DrawerControllerE drawerControllerE = Get.put(DrawerControllerE());
-    void onItemTapped(int index) {
-      selectedIndex.value = index;
-    }
+    TabControllerE tabController = Get.put(TabControllerE());
 
     return Scaffold(
       key: drawerControllerE.scaffoldKey,
-      drawer: SideMenu(onTap: onItemTapped),
+      drawer: SideMenu(onTap: tabController.changeTabIndex),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,29 +24,20 @@ class MainScreen extends StatelessWidget {
             if (ScreenResponsive.isDesktop(context))
               Expanded(
                 flex: 2,
-                child: SideMenu(onTap: onItemTapped),
+                child: SideMenu(onTap: tabController.changeTabIndex),
               ),
             Expanded(
               flex: 10,
               child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  color: const Color(0XFF282E45),
-                  child: Obx(() => switchScreen(selectedIndex.value))),
-            )
+                height: MediaQuery.of(context).size.height,
+                color: const Color(0XFF282E45),
+                child: Obx(
+                    () => tabController.tabs[tabController.currentIndex.value]),
+              ),
+            ),
           ],
         ),
       ),
     );
-  }
-
-  switchScreen(int value) {
-    switch (value) {
-      case 0:
-        return const DashboardScreen();
-      case 1:
-        return const UserManagerScreen();
-      default:
-        return const DashboardScreen();
-    }
   }
 }
