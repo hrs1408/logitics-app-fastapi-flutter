@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../resources/screen_responsive.dart';
 import '../../widgets/table/user_table.dart';
@@ -11,6 +12,7 @@ class BottomTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DataGridController dataGridController = DataGridController();
     if (ScreenResponsive.isDesktop(context)) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +33,7 @@ class BottomTable extends StatelessWidget {
                 )
               ],
             ),
-            child: const UserTable(),
+            child: UserTable(dataGridController: dataGridController),
           ),
           const BannerSlider(
             height: 200,
@@ -58,7 +60,9 @@ class BottomTable extends StatelessWidget {
               )
             ],
           ),
-          child: const UserTable(),
+          child: UserTable(
+            dataGridController: dataGridController,
+          ),
         ),
       ],
     );

@@ -5,17 +5,21 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
 class UserTable extends StatelessWidget {
-  const UserTable({super.key});
+  final DataGridController dataGridController;
+
+  const UserTable({super.key, required this.dataGridController});
 
   @override
   Widget build(BuildContext context) {
     UserController userController = Get.put(UserController());
     return Container(
+      height: MediaQuery.of(context).size.height * 0.8,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
       ),
       child: SfDataGridTheme(
         data: SfDataGridThemeData(
+          selectionColor: const Color(0XFF2B5DFF).withOpacity(0.4),
           headerColor: const Color(0XFF2B5DFF),
           filterIconColor: Colors.white,
           sortIconColor: Colors.white,
@@ -27,6 +31,8 @@ class UserTable extends StatelessWidget {
             source: userController.userDataSource.value,
             allowSorting: true,
             allowMultiColumnSorting: true,
+            selectionMode: SelectionMode.single,
+            controller: dataGridController,
             columns: [
               GridColumn(
                   width: 100,
@@ -50,6 +56,16 @@ class UserTable extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ))),
               GridColumn(
+                  columnName: 'full_name',
+                  label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        'Tên đầy đủ',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white),
+                      ))),
+              GridColumn(
                   columnName: 'role',
                   label: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -60,16 +76,15 @@ class UserTable extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ))),
               GridColumn(
-                columnName: 'full_name',
-                label: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: const Text(
-                    'Họ và tên',
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
+                  columnName: 'user_position',
+                  label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        'Vị trí',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white),
+                      ))),
             ],
           ),
         ),
