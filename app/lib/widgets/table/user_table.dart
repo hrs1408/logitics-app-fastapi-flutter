@@ -33,7 +33,7 @@ class UserTable extends StatelessWidget {
             allowMultiColumnSorting: true,
             selectionMode: SelectionMode.single,
             controller: dataGridController,
-            columns: [
+            columns: <GridColumn>[
               GridColumn(
                   width: 100,
                   columnName: 'id',
@@ -82,6 +82,16 @@ class UserTable extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: const Text(
                         'Vị trí',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white),
+                      ))),
+              GridColumn(
+                  columnName: 'active',
+                  label: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        'Trạng thái',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: Colors.white),
                       ))),

@@ -10,11 +10,6 @@ class TabControllerE extends GetxController {
     const UserManagerScreen()
   ];
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   void changeTabIndex(int index) {
     switch (index) {
       case 0:

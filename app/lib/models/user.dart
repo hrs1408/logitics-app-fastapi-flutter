@@ -5,6 +5,8 @@ import 'package:app/models/user_information.dart';
 List<User> listUserFromJson(String value) => List<User>.from(
     json.decode(value)["data"].map((item) => User.userFromJson(item)));
 
+User userFromJson(String value) => User.userFromJson(json.decode(value)["data"]);
+
 class User {
   int id;
   String email;

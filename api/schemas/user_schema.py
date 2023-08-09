@@ -3,6 +3,7 @@ from typing import Optional, List
 from fastapi import HTTPException
 from pydantic import BaseModel, root_validator
 
+
 # from schemas.timekeeping_schema import TimekeepingSchema
 
 
@@ -60,10 +61,12 @@ class UserSchema(BaseModel):
     user_position_id: int
     is_active: bool
     branch_id: Optional[int]
+    vehicle_id: Optional[int]
     refresh_token_sub: Optional[str]
     user_information: Optional[UserInformationSchema]
     user_address: Optional[List[UserAddressSchema]]
     user_bank_account: Optional[List[UserBankAccountSchema]]
+
     # timekeeping: Optional[List['TimekeepingSchema']]
 
     class Config:
@@ -76,6 +79,7 @@ class UserAdminCreateSchema(BaseModel):
     password: str
     confirm_password: str
     user_role: str
+    user_position_id: int
 
     @root_validator()
     def validate_password(cls, values):
@@ -88,6 +92,13 @@ class UserAdminCreateSchema(BaseModel):
         if password and len(password) < 8:
             raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
         return values
+
+
+class UserAdminUpdateSchema(BaseModel):
+    email: str
+    full_name: str
+    user_role: str
+    user_position_id: int
 
 
 class UserPositionBase(BaseModel):

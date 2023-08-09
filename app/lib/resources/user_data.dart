@@ -30,6 +30,11 @@ class UserDataSource extends DataGridSource {
                 columnName: 'user_position',
                 value: positionName(dataGridRow.workPositionId),
               ),
+              DataGridCell(
+                  columnName: 'active',
+                  value: dataGridRow.isActive
+                      ? 'Đang hoạt động'
+                      : 'Ngừng hoạt động'),
             ]))
         .toList();
   }
@@ -60,16 +65,22 @@ class UserDataSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-          return Container(
-              alignment: (dataGridCell.columnName == 'id')
-                  ? Alignment.center
-                  : Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                dataGridCell.value.toString(),
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 16.0, color: Colors.white),
-              ));
-        }).toList());
+      return Container(
+          alignment: (dataGridCell.columnName == 'id')
+              ? Alignment.center
+              : Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            dataGridCell.value.toString(),
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontSize: 16.0,
+                color: dataGridCell.value == 'Đang hoạt động'
+                    ? Colors.green
+                    : dataGridCell.value == 'Ngừng hoạt động'
+                        ? Colors.red
+                        : Colors.white),
+          ));
+    }).toList());
   }
 }
