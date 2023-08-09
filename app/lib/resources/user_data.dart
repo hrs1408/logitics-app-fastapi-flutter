@@ -1,42 +1,22 @@
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
 
 class UserDataSource extends DataGridSource {
+  RxList<User> paginatedUsers = List<User>.empty(growable: true).obs;
+  RxList<User> allUser = List<User>.empty(growable: true).obs;
+  int perPage = 13;
+
   UserDataSource({required List<User> users}) {
-    dataGridRows = users
-        .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
-              DataGridCell<int>(
-                columnName: 'id',
-                value: dataGridRow.id,
-              ),
-              DataGridCell<String>(
-                  columnName: 'email', value: dataGridRow.email),
-              DataGridCell<String>(
-                  columnName: 'full_name',
-                  value: dataGridRow.userInformation.fullName),
-              DataGridCell<String>(
-                columnName: 'role',
-                value: dataGridRow.userRole == 'supper_admin'
-                    ? 'Quản trị hệ thống'
-                    : dataGridRow.userRole == 'admin'
-                        ? 'Quản trị viên'
-                        : dataGridRow.userRole == 'user'
-                            ? 'Nhân viên'
-                            : 'Khách hàng',
-              ),
-              DataGridCell<String>(
-                columnName: 'user_position',
-                value: positionName(dataGridRow.workPositionId),
-              ),
-              DataGridCell(
-                  columnName: 'active',
-                  value: dataGridRow.isActive
-                      ? 'Đang hoạt động'
-                      : 'Ngừng hoạt động'),
-            ]))
-        .toList();
+    allUser.value = users.reversed.toList();
+    getInitPaginatedUsers();
+    buildDataGridRows();
+  }
+
+  void getInitPaginatedUsers() {
+    paginatedUsers.value = allUser.take(perPage).toList();
   }
 
   List<DataGridRow> dataGridRows = [];
@@ -82,5 +62,62 @@ class UserDataSource extends DataGridSource {
                         : Colors.white),
           ));
     }).toList());
+  }
+
+  @override
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    int startIndex = newPageIndex * perPage;
+    int endIndex = startIndex + perPage;
+    if (startIndex < allUser.value.length && endIndex <= allUser.value.length) {
+      paginatedUsers.value =
+          allUser.value.getRange(startIndex, endIndex).toList(growable: false);
+      buildDataGridRows();
+      notifyListeners();
+    } else if (endIndex > allUser.value.length) {
+      paginatedUsers.value = allUser.value
+          .getRange(startIndex, allUser.value.length)
+          .toList(growable: false);
+      buildDataGridRows();
+      notifyListeners();
+    } else {
+      paginatedUsers.value = List<User>.empty(growable: true);
+      buildDataGridRows();
+    }
+    return true;
+  }
+
+  void buildDataGridRows() {
+    dataGridRows = paginatedUsers.value
+        .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
+              DataGridCell<int>(
+                columnName: 'id',
+                value: dataGridRow.id,
+              ),
+              DataGridCell<String>(
+                  columnName: 'email', value: dataGridRow.email),
+              DataGridCell<String>(
+                  columnName: 'full_name',
+                  value: dataGridRow.userInformation.fullName),
+              DataGridCell<String>(
+                columnName: 'role',
+                value: dataGridRow.userRole == 'supper_admin'
+                    ? 'Quản trị hệ thống'
+                    : dataGridRow.userRole == 'admin'
+                        ? 'Quản trị viên'
+                        : dataGridRow.userRole == 'user'
+                            ? 'Nhân viên'
+                            : 'Khách hàng',
+              ),
+              DataGridCell<String>(
+                columnName: 'user_position',
+                value: positionName(dataGridRow.workPositionId),
+              ),
+              DataGridCell(
+                  columnName: 'active',
+                  value: dataGridRow.isActive
+                      ? 'Đang hoạt động'
+                      : 'Ngừng hoạt động'),
+            ]))
+        .toList(growable: false);
   }
 }

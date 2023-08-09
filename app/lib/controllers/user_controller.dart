@@ -9,8 +9,8 @@ import '../models/user.dart';
 import '../widgets/snack_bar/get_snack_bar.dart';
 
 class UserController extends GetxController {
-  Rx<UserDataSource> userDataSource = UserDataSource(users: []).obs;
   RxList<User> users = List<User>.empty(growable: true).obs;
+  Rx<UserDataSource> userDataSource = UserDataSource(users: []).obs;
   RxBool isLoading = false.obs;
   RxInt selectedId = 0.obs;
   Rx<User> userSelected = User(
@@ -53,10 +53,10 @@ class UserController extends GetxController {
       var response = await UserService().getUsers(token);
       if (response != null) {
         users.assignAll(listUserFromJson(response.body));
+        userDataSource.value = UserDataSource(users: users);
       }
     } finally {
       isLoading.value = false;
-      userDataSource.value = UserDataSource(users: users);
     }
   }
 

@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 
 class TabControllerE extends GetxController {
   RxInt currentIndex = 0.obs;
-  List<StatelessWidget> tabs = [
-    const DashboardScreen(),
-    const UserManagerScreen()
-  ];
+  List<StatelessWidget> tabs = [const DashboardScreen(), UserManagerScreen()];
 
   void changeTabIndex(int index) {
     switch (index) {

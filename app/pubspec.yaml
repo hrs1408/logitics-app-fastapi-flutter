@@ -33,6 +33,7 @@ dependencies:
   syncfusion_flutter_datagrid: ^22.1.39
   syncfusion_flutter_datagrid_export: ^22.2.8
   syncfusion_flutter_pdf: ^22.1.39
+  path_provider: ^2.1.0
 
 dev_dependencies:
   flutter_test:
