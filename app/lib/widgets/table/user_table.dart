@@ -21,7 +21,7 @@ class UserTable extends StatelessWidget {
         userController.users,
         (callback) => {
               userDataSource.value =
-                  UserDataSource(users: callback.reversed.toList()),
+                  UserDataSource(users: callback.toList()),
             });
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
