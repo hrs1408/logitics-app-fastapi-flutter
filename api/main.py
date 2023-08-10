@@ -94,6 +94,7 @@ origins = [
     "http://localhost.tiangolo.com",
     "https://localhost.tiangolo.com",
     "http://localhost:3030",
+    "https://hrs1408.web.app",
 ]
 
 app.add_middleware(

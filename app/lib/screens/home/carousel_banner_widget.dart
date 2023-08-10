@@ -1,3 +1,4 @@
+import 'package:app/resources/screen_responsive.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class CarouselBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 700,
+      height: ScreenResponsive.isMobile(context) ? 400 : ScreenResponsive.isTablet(context) ? 500 : 700,
       color: Colors.white70,
       child: CarouselSlider(
           options: CarouselOptions(

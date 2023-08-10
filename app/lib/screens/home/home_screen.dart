@@ -6,6 +6,7 @@ import 'package:app/screens/home/mode_of_operation.dart';
 import 'package:app/screens/home/navbar_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../resources/screen_responsive.dart';
 import 'contact_language_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,18 +14,20 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return  Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(
           children: [
-            ContactAndLanguage(),
-            Header(),
-            Navbar(),
-            CarouselBanner(),
-            DeliveryService(),
-            ModeOfOperation(),
-            Footer()
+            const ContactAndLanguage(),
+            const Header(),
+            ScreenResponsive.isTablet(context) || ScreenResponsive.isDesktop(context)
+                ?  const Navbar()
+                : const SizedBox.shrink(),
+            const CarouselBanner(),
+            const DeliveryService(),
+            const ModeOfOperation(),
+            const Footer()
           ],
         ),
       )),

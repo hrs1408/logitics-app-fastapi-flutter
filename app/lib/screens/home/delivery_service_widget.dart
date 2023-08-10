@@ -1,4 +1,5 @@
 import 'package:app/resources/app_colors.dart';
+import 'package:app/resources/screen_responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -8,45 +9,52 @@ class DeliveryService extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 40),
+      padding: EdgeInsets.symmetric(
+          horizontal: ScreenResponsive.isMobile(context) ? 20 : 100,
+          vertical: 40),
       color: Colors.white,
       child: Center(
         child: Column(
           children: [
-            const Text(
+            Text(
               'DỊCH VỤ CHUYỂN PHÁT CỦA CHÚNG TÔI',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: ScreenResponsive.isDesktop(context) ? 30 : 20,
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 40,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.center,
+              spacing: 20,
               children: [
                 buildServiceItem(
-                  'https://ntx.com.vn/images/website_v2/saving_service.webp',
-                  '01',
-                  'Giao hàng tiếp kiệm',
-                  'Dịch vụ giao hàng với cước phí vận chuyển rẻ, thời gian giao hàng hợp lý. Giải pháp vận chuyển tiết kiệm tối đa chi phí, phù hợp với khách gửi hàng số lượng lớn mỗi ngày.',
-                ),
+                    'https://ntx.com.vn/images/website_v2/saving_service.webp',
+                    '01',
+                    'Giao hàng tiếp kiệm',
+                    'Dịch vụ giao hàng với cước phí vận chuyển rẻ, thời gian giao hàng hợp lý. Giải pháp vận chuyển tiết kiệm tối đa chi phí, phù hợp với khách gửi hàng số lượng lớn mỗi ngày.',
+                    context),
                 const SizedBox(
                   width: 40,
                 ),
                 buildServiceItem(
-                  'https://ntx.com.vn/images/website_v2/fast_service.webp',
-                  '02',
-                  'Giao hàng nhanh',
-                  'Dịch vụ giao hàng đến người nhận. Phù hợp với chuyển phát nhanh thư từ, bưu phẩm ngay trong ngày với mức phí hợp lý.',
-                ),
+                    'https://ntx.com.vn/images/website_v2/fast_service.webp',
+                    '02',
+                    'Giao hàng nhanh',
+                    'Dịch vụ giao hàng đến người nhận. Phù hợp với chuyển phát nhanh thư từ, bưu phẩm ngay trong ngày với mức phí hợp lý.',
+                    context),
                 const SizedBox(
                   width: 40,
                 ),
                 buildServiceItem(
-                  'https://ntx.com.vn/images/website_v2/timing_service.webp',
-                  '03',
-                  'Giao hàng hỏa tốc',
-                  'Dịch vụ giao hàng theo khung thời gian yêu cầu của khách hàng. Hình thức giao nhận chủ động, khách hàng không mất thời gian chờ đợi.',
-                ),
+                    'https://ntx.com.vn/images/website_v2/timing_service.webp',
+                    '03',
+                    'Giao hàng hỏa tốc',
+                    'Dịch vụ giao hàng theo khung thời gian yêu cầu của khách hàng. Hình thức giao nhận chủ động, khách hàng không mất thời gian chờ đợi.',
+                    context),
               ],
             )
           ],
@@ -56,9 +64,12 @@ class DeliveryService extends StatelessWidget {
   }
 
   Container buildServiceItem(
-      String image, String number, String title, String content) {
+      String image, String number, String title, String content, context) {
     return Container(
-      width: 300,
+      margin:  EdgeInsets.only(bottom: ScreenResponsive.isTablet(context) || ScreenResponsive.isMobile(context) ? 20 : 0),
+      width: ScreenResponsive.isMobile(context)
+          ? MediaQuery.sizeOf(context).width
+          : 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -79,6 +90,9 @@ class DeliveryService extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 image,
+                width: ScreenResponsive.isMobile(context)
+                    ? MediaQuery.sizeOf(context).width
+                    : 300,
               ),
             ),
             const SizedBox(height: 20),

@@ -1,3 +1,4 @@
+import 'package:app/resources/screen_responsive.dart';
 import 'package:flutter/material.dart';
 
 class ModeOfOperation extends StatelessWidget {
@@ -10,9 +11,12 @@ class ModeOfOperation extends StatelessWidget {
       color: const Color(0XFFF9F9F9),
       child: Column(
         children: [
-          const Text(
+          Text(
             'PHƯƠNG THỨC HOẠT ĐỘNG CỦA CHÚNG TÔI',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: ScreenResponsive.isDesktop(context) ? 30 : 20,
+                fontWeight: FontWeight.bold),
           ),
           const SizedBox(
             height: 40,
