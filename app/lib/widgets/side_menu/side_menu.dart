@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controllers/tab_controller.dart';
+
 class SideMenu extends StatelessWidget {
   final Function onTap;
 
@@ -80,6 +82,10 @@ class SideMenu extends StatelessWidget {
                 () {
               onTap(1);
             }),
+            buildListTile('Quản Lý Vị Trí làm Việc',
+                const FaIcon(FontAwesomeIcons.bridge, color: Colors.white), () {
+              onTap(2);
+            }),
             buildListTile('Quản Lý Đơn Hàng',
                 const FaIcon(FontAwesomeIcons.box, color: Colors.white), () {}),
             buildListTile(
@@ -115,10 +121,12 @@ class SideMenu extends StatelessWidget {
       horizontalTitleGap: 10,
       contentPadding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       leading: icon,
-      title: Text(
-        title,
-        style:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+      title: Tooltip(
+        message: title,
+        child: Text(
+          title,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
       onTap: () {
         onTap();

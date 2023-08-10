@@ -11,7 +11,8 @@ class UserService {
       Uri.parse('${AppHttp.baseUrl}/user'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token"
+        "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "true",
       },
     );
     return response;
@@ -22,7 +23,8 @@ class UserService {
       Uri.parse('${AppHttp.baseUrl}/user/$id'),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token"
+        "Authorization": "Bearer $token",
+        "ngrok-skip-browser-warning": "true",
       },
     );
     return response;

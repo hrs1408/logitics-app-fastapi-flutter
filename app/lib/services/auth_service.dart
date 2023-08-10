@@ -19,11 +19,12 @@ class AuthService {
   }
 
   Future<dynamic> getMe(String token) async {
-    var response = await http.get(Uri.parse('${AppHttp.baseUrl}/auth/me'),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        });
+    var response =
+        await http.get(Uri.parse('${AppHttp.baseUrl}/auth/me'), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+      "ngrok-skip-browser-warning": "true",
+    });
     return response;
   }
 }

@@ -1,11 +1,16 @@
 import 'package:app/screens/dashboard/dash_board_screen.dart';
+import 'package:app/screens/position_manager/position_manager_screen.dart';
 import 'package:app/screens/user_manager/user_manager_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 class TabControllerE extends GetxController {
   RxInt currentIndex = 0.obs;
-  List<StatelessWidget> tabs = [const DashboardScreen(), UserManagerScreen()];
+  List<StatelessWidget> tabs = [
+    const DashboardScreen(),
+    const UserManagerScreen(),
+    const PositionManagerScreen()
+  ];
 
   void changeTabIndex(int index) {
     switch (index) {
@@ -13,6 +18,9 @@ class TabControllerE extends GetxController {
         currentIndex.value = index;
         break;
       case 1:
+        currentIndex.value = index;
+        break;
+      case 2:
         currentIndex.value = index;
         break;
       default:

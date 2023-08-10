@@ -91,11 +91,13 @@ def start_up_event():
 
 
 origins = [
+    "*",
     "http://localhost.tiangolo.com",
     "https://localhost.tiangolo.com",
     "http://localhost:3030",
+    "http://localhost:40053",
     "https://hrs1408.web.app",
-]
+    "https://hrs1408.firebaseapp.com", ]
 
 app.add_middleware(
     CORSMiddleware,
