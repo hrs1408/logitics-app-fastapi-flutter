@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from models.user import User
+from models.user import User, UserAddress, UserBankAccount, UserPosition, UserInformation
 from repositories.base_repository import BaseRepository
 
 
@@ -21,26 +21,30 @@ class UserRepository(BaseRepository):
 class UserInformationRepository(BaseRepository):
     @staticmethod
     def find_by_user_id(db: Session, user_id):
-        return db.query(User).filter(User.id == user_id).first()
+        return db.query(UserInformation).filter(User.id == user_id).first()
 
 
 class UserAddressRepository(BaseRepository):
     @staticmethod
     def find_by_user_id(db: Session, user_id):
-        return db.query(User).filter(User.id == user_id).first()
+        return db.query(UserAddress).filter(User.id == user_id).first()
 
     @staticmethod
     def find_all_by_user_id(db: Session, user_id):
-        return db.query(User).filter(User.id == user_id).all()
+        return db.query(UserAddress).filter(User.id == user_id).all()
 
 
 class UserBankAccountRepository(BaseRepository):
     @staticmethod
     def find_by_user_id(db: Session, user_id):
-        return db.query(User).filter(User.id == user_id).first()
+        return db.query(UserBankAccount).filter(User.id == user_id).first()
+
+    @staticmethod
+    def find_all_by_user_id(db: Session, user_id):
+        return db.query(UserBankAccount).filter(User.id == user_id).all()
 
 
 class UserPositionRepository(BaseRepository):
     @staticmethod
     def find_by_user_id(db: Session, user_id):
-        return db.query(User).filter(User.id == user_id).first()
+        return db.query(UserPosition).filter(User.id == user_id).first()

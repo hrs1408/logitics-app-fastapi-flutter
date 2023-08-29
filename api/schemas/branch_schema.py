@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class PortBase(BaseModel):
     port_name: str
-    type_port: str
+    port_type: str
 
 
 class PortSchema(PortBase):
@@ -32,21 +32,24 @@ class HeadquarterSchema(HeadquarterBase):
 class WarehouseBase(BaseModel):
     warehouse_name: str
     address: str
-    ports: Optional[List[PortSchema]]
 
 
 class WarehouseSchema(WarehouseBase):
     id: int
     branch_id: int
+    ports: Optional[List[PortSchema]]
 
     class Config:
         orm_mode = True
 
 
-class BranchSchema(BaseModel):
-    id: int
+class BranchSchemaBase(BaseModel):
     branch_name: str
     province: str
+
+
+class BranchSchema(BranchSchemaBase):
+    id: int
     headquarters: Optional[List['HeadquarterSchema']]
 
     class Config:

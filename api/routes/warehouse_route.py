@@ -1,13 +1,13 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from config import get_db
 from models.branch import Warehouse, Branch
 from repositories.branch_repository import WarehouseRepository, BranchRepository, PortRepository
 from repositories.jwt_repository import JWTBearer
-from schemas.branch_schema import WarehouseSchema
+from schemas.branch_schema import WarehouseSchema, WarehouseBase
 from schemas.schema import ResponseSchema
 from ultis.permission import check_permission_role_admin
 from ultis.security import get_current_user
@@ -31,34 +31,49 @@ def get_warehouse_by_id(warehouse_id: int, id: int = Depends(get_current_user), 
     check_permission_role_admin(id=id, db=db)
     warehouse = WarehouseRepository.find_by_id(db, Warehouse, warehouse_id)
     if not warehouse:
-        return ResponseSchema.from_api_route(status_code=404, data="Warehouse not found").dict(exclude_none=True)
+        raise HTTPException(status_code=404, detail="Warehouse not found")
     return ResponseSchema.from_api_route(status_code=200, data=warehouse).dict(exclude_none=True)
 
 
-@warehouse_route.post("/", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[WarehouseSchema])
-def create_warehouse(warehouse: WarehouseSchema, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
+@warehouse_route.get("{branch_id}/branch", dependencies=[Depends(JWTBearer())],
+                     response_model=ResponseSchema[List[WarehouseSchema]])
+def get_warehouse_by_branch_id(branch_id: int, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
     check_permission_role_admin(id=id, db=db)
-    branch = BranchRepository.find_by_id(db, Branch, warehouse.branch_id)
+    branch = BranchRepository.find_by_id(db, Branch, branch_id)
     if not branch:
-        return ResponseSchema.from_api_route(status_code=404, data="Branch not found").dict(exclude_none=True)
-    warehouse = WarehouseRepository.find_by_name(db, warehouse.warehouse_name)
-    if warehouse:
-        return ResponseSchema.from_api_route(status_code=400, data="Warehouse already exist").dict(exclude_none=True)
-    warehouse = WarehouseRepository.insert(db, Warehouse(**warehouse.dict()))
-    return ResponseSchema.from_api_route(status_code=201, data=warehouse).dict(exclude_none=True)
+        raise HTTPException(status_code=404, detail="Branch not found")
+    warehouses = WarehouseRepository.find_by_branch_id(db, branch_id)
+    return ResponseSchema.from_api_route(status_code=200, data=warehouses).dict(exclude_none=True)
+
+
+@warehouse_route.post("/{branch_id}", dependencies=[Depends(JWTBearer())],
+                      response_model=ResponseSchema[WarehouseSchema])
+def create_warehouse(branch_id: int, warehouse: WarehouseBase, id: int = Depends(get_current_user),
+                     db: Session = Depends(get_db)):
+    check_permission_role_admin(id=id, db=db)
+    branch = BranchRepository.find_by_id(db, Branch, branch_id)
+    if not branch:
+        raise HTTPException(status_code=404, detail="Branch not found")
+    warehouse_est = WarehouseRepository.find_by_name(db, warehouse.warehouse_name)
+    if warehouse_est:
+        raise HTTPException(status_code=404, detail="Warehouse already exist")
+    warehouse_ct = Warehouse(
+        warehouse_name=warehouse.warehouse_name,
+        address=warehouse.address,
+        branch_id=branch_id
+    )
+    warehouse_ctd = WarehouseRepository.insert(db, warehouse_ct)
+    return ResponseSchema.from_api_route(status_code=201, data=warehouse_ctd).dict(exclude_none=True)
 
 
 @warehouse_route.put("/{warehouse_id}", dependencies=[Depends(JWTBearer())],
                      response_model=ResponseSchema[WarehouseSchema])
-def update_warehouse(warehouse_id: int, warehouse: WarehouseSchema, id: int = Depends(get_current_user),
+def update_warehouse(warehouse_id: int, warehouse: WarehouseBase, id: int = Depends(get_current_user),
                      db: Session = Depends(get_db)):
     check_permission_role_admin(id=id, db=db)
-    branch = BranchRepository.find_by_id(db, Branch, warehouse.branch_id)
-    if not branch:
-        return ResponseSchema.from_api_route(status_code=404, data="Branch not found").dict(exclude_none=True)
     warehouse_ed = WarehouseRepository.find_by_id(db, Warehouse, warehouse_id)
     if not warehouse:
-        return ResponseSchema.from_api_route(status_code=404, data="Warehouse not found").dict(exclude_none=True)
+        raise HTTPException(status_code=404, detail="Warehouse not found")
     warehouse_ed.warehouse_name = warehouse.warehouse_name
     warehouse_ed.address = warehouse.address
     WarehouseRepository.update(db, warehouse_ed)
@@ -71,9 +86,9 @@ def delete_warehouse(warehouse_id: int, id: int = Depends(get_current_user), db:
     check_permission_role_admin(id=id, db=db)
     ports = PortRepository.find_by_warehouse_id(db, warehouse_id)
     if ports:
-        return ResponseSchema.from_api_route(status_code=400, data="Warehouse have port").dict(exclude_none=True)
+        raise HTTPException(status_code=404, detail="Warehouse has port")
     warehouse = WarehouseRepository.find_by_id(db, Warehouse, warehouse_id)
     if not warehouse:
-        return ResponseSchema.from_api_route(status_code=404, data="Warehouse not found").dict(exclude_none=True)
+        raise HTTPException(status_code=404, detail="Warehouse not found")
     WarehouseRepository.delete(db, warehouse)
     return ResponseSchema.from_api_route(status_code=200, data=warehouse).dict(exclude_none=True)
