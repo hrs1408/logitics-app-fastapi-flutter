@@ -111,3 +111,13 @@ class UserPositionSchema(UserPositionBase):
 
     class Config:
         orm_mode = True
+
+
+class UserUpdateAllSchema(BaseModel):
+    email: str
+    full_name: str
+    user_role: str
+    user_position_id: int
+    phone_number: str
+    date_of_birth: str
+    identity_card_code: str

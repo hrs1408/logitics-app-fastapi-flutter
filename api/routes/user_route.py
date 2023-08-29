@@ -11,7 +11,8 @@ from repositories.user_repository import UserRepository, UserInformationReposito
     UserBankAccountRepository
 from schemas.schema import ResponseSchema
 from schemas.user_schema import UserSchema, UserAdminCreateSchema, UserInformationSchema, UserAddressSchema, \
-    UserBankAccountSchema, UserInformationBase, UserAdminUpdateSchema, UserAddressBase, UserBankAccountBase
+    UserBankAccountSchema, UserInformationBase, UserAdminUpdateSchema, UserAddressBase, UserBankAccountBase, \
+    UserUpdateAllSchema
 from ultis.permission import check_permission_role_admin
 from ultis.security import get_current_user
 
@@ -260,3 +261,33 @@ def delete_user_bank_account(user_id: int, bank_account_id: int, db: Session = D
         raise HTTPException(status_code=404, detail="User bank account not found")
     UserBankAccountRepository.delete(db, user_bank_account)
     return ResponseSchema.from_api_route(status_code=200, data=user_bank_account).dict(exclude_none=True)
+
+
+@user_route.put('/update-user-information-all/{user_id}', dependencies=[Depends(JWTBearer())],
+                response_model=ResponseSchema[UserSchema])
+def update_user_information(user_id: int, user_info: UserUpdateAllSchema, db: Session = Depends(get_db)):
+    user = UserRepository.find_by_id(db, User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user.email = user_info.email
+    user.user_position_id = user_info.user_position_id
+    user.user_role = user_info.user_role
+    user_info_db = UserInformationRepository.find_by_user_id(db, user_id)
+    if user_info_db is None:
+        user_info_ct = UserInformation(
+            user_id=user_id,
+            full_name=user_info.full_name,
+            phone_number=user_info.phone_number,
+            date_of_birth=user_info.date_of_birth,
+            identity_card_code=user_info.identity_card_code
+        )
+        UserRepository.update(db, user)
+        UserInformationRepository.insert(db, user_info_ct)
+    else:
+        user_info_db.full_name = user_info.full_name
+        user_info_db.phone_number = user_info.phone_number
+        user_info_db.date_of_birth = user_info.date_of_birth
+        user_info_db.identity_card_code = user_info.identity_card_code
+        UserRepository.update(db, user)
+        UserInformationRepository.update(db, user_info_db)
+    return ResponseSchema.from_api_route(status_code=200, data=user).dict(exclude_none=True)
