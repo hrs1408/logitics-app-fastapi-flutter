@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:app/controllers/position_controller.dart';
 import 'package:app/controllers/user_controller.dart';
 import 'package:app/models/dto/user_create.dart';
+import 'package:app/resources/screen_responsive.dart';
 import 'package:app/widgets/snack_bar/get_snack_bar.dart';
 import 'package:app/widgets/table/user_table.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
@@ -390,7 +392,9 @@ class UserManagerScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0XFF00428D),
                     padding: const EdgeInsets.all(20)),
-                child: const Text('Thêm người dùng'),
+                child: ScreenResponsive.isMobile(context)
+                    ? const Icon(Icons.add)
+                    : const Text('Thêm người dùng'),
               ),
               const SizedBox(width: 20),
               ElevatedButton(
@@ -404,7 +408,9 @@ class UserManagerScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0XFF00428D),
                       padding: const EdgeInsets.all(20)),
-                  child: const Text('Xem thông tin')),
+                  child: ScreenResponsive.isMobile(context)
+                      ? const Icon(Icons.info)
+                      : const Text('Thông tin người dùng')),
               const SizedBox(width: 20),
               ElevatedButton(
                   onPressed: () {
@@ -417,7 +423,9 @@ class UserManagerScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0XFF00428D),
                       padding: const EdgeInsets.all(20)),
-                  child: const Text('Chỉnh sửa')),
+                  child: ScreenResponsive.isMobile(context)
+                      ? const Icon(Icons.edit)
+                      : const Text('Chỉnh sửa')),
               const SizedBox(width: 20),
               ElevatedButton(
                   onPressed: () {
@@ -430,7 +438,9 @@ class UserManagerScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0XFF00428D),
                       padding: const EdgeInsets.all(20)),
-                  child: const Text('Xóa'))
+                  child: ScreenResponsive.isMobile(context)
+                      ? const Icon(Icons.delete)
+                      : const Text('Xóa'))
             ],
           ),
           const SizedBox(
@@ -451,7 +461,12 @@ class UserManagerScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0XFF00428D),
                         padding: const EdgeInsets.all(20)),
-                    child: const Text('Xuất file pdf'),
+                    child: ScreenResponsive.isMobile(context)
+                        ? const FaIcon(
+                            FontAwesomeIcons.filePdf,
+                            color: Colors.white,
+                          )
+                        : const Text('Xuất file pdf'),
                   ),
                   const SizedBox(width: 20),
                   ElevatedButton(
@@ -459,7 +474,12 @@ class UserManagerScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0XFF00428D),
                           padding: const EdgeInsets.all(20)),
-                      child: const Text('Xuất file excel')),
+                      child: ScreenResponsive.isMobile(context)
+                          ? const FaIcon(
+                              FontAwesomeIcons.fileExcel,
+                              color: Colors.white,
+                            )
+                          : const Text('Xuất file excel')),
                 ],
               ),
               Row(
@@ -476,22 +496,33 @@ class UserManagerScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         padding: const EdgeInsets.all(20)),
-                    child: const Text('Khóa tài khoản'),
+                    child: ScreenResponsive.isMobile(context)
+                        ? const FaIcon(
+                            FontAwesomeIcons.lock,
+                            color: Colors.white,
+                          )
+                        : const Text('Khóa tài khoản'),
                   ),
                   const SizedBox(width: 20),
                   ElevatedButton(
-                      onPressed: () {
-                        if (checkSelectedRow(dataGridControllerL)) {
-                          userController.activeUser(dataGridControllerL
-                              .selectedRows[0]
-                              .getCells()[0]
-                              .value);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          padding: const EdgeInsets.all(20)),
-                      child: const Text('Mở khóa tài khoản')),
+                    onPressed: () {
+                      if (checkSelectedRow(dataGridControllerL)) {
+                        userController.activeUser(dataGridControllerL
+                            .selectedRows[0]
+                            .getCells()[0]
+                            .value);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.all(20)),
+                    child: ScreenResponsive.isMobile(context)
+                        ? const FaIcon(
+                            FontAwesomeIcons.unlock,
+                            color: Colors.white,
+                          )
+                        : const Text('Mở khóa tài khoản'),
+                  )
                 ],
               )
             ],

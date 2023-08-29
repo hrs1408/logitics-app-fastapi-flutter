@@ -15,13 +15,13 @@ class UserTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserController userController = Get.put(UserController());
+    double width = MediaQuery.of(context).size.width;
     Rx<UserDataSource> userDataSource =
         UserDataSource(users: userController.users).obs;
     ever(
         userController.users,
         (callback) => {
-              userDataSource.value =
-                  UserDataSource(users: callback.toList()),
+              userDataSource.value = UserDataSource(users: callback.toList()),
             });
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
@@ -52,7 +52,7 @@ class UserTable extends StatelessWidget {
                   rowsPerPage: userDataSource.value.perPage,
                   columns: <GridColumn>[
                     GridColumn(
-                        width: 100,
+                        width: 80,
                         columnName: 'id',
                         label: Container(
                             padding:

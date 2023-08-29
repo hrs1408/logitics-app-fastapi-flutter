@@ -16,7 +16,7 @@ class MainScreen extends StatelessWidget {
 
     return Scaffold(
       key: drawerControllerE.scaffoldKey,
-      drawer: SideMenu(onTap: tabController.changeTabIndex),
+      drawer: SideMenu(onTap: tabController.changeTabIndex, tabs: []),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +24,7 @@ class MainScreen extends StatelessWidget {
             if (ScreenResponsive.isDesktop(context))
               Expanded(
                 flex: 2,
-                child: SideMenu(onTap: tabController.changeTabIndex),
+                child: SideMenu(onTap: tabController.changeTabIndex, tabs: []),
               ),
             Expanded(
               flex: 10,

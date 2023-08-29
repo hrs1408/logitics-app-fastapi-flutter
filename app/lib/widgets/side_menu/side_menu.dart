@@ -5,12 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../controllers/tab_controller.dart';
-
 class SideMenu extends StatelessWidget {
   final Function onTap;
+  final List tabs;
 
-  const SideMenu({super.key, required this.onTap});
+  const SideMenu({super.key, required this.onTap, required this.tabs});
 
   void handleLogout() {
     SharedPreferences.getInstance().then((prefs) {
@@ -72,51 +71,65 @@ class SideMenu extends StatelessWidget {
               ),
             ),
             buildListTile(
-                'Tổng Quan',
+                'Tổng quan',
                 const FaIcon(FontAwesomeIcons.solidChartBar,
                     color: Colors.white), () {
               onTap(0);
-            }),
-            buildListTile('Quản Lý Người Dùng',
+            }, context),
+            buildListTile('Quản lý người dùng',
                 const FaIcon(FontAwesomeIcons.userAlt, color: Colors.white),
                 () {
               onTap(1);
-            }),
-            buildListTile('Quản Lý Vị Trí làm Việc',
-                const FaIcon(FontAwesomeIcons.bridge, color: Colors.white), () {
+            }, context),
+            buildListTile('Vị trí làm việc',
+                const FaIcon(FontAwesomeIcons.briefcase, color: Colors.white),
+                () {
               onTap(2);
-            }),
-            buildListTile('Quản Lý Đơn Hàng',
-                const FaIcon(FontAwesomeIcons.box, color: Colors.white), () {}),
+            }, context),
+            buildListTile(
+                'Quản lý chi nhánh',
+                const FaIcon(FontAwesomeIcons.city, color: Colors.white),
+                () {},
+                context),
+            buildListTile(
+                'Quản lý trụ sở',
+                const FaIcon(FontAwesomeIcons.building, color: Colors.white),
+                () {},
+                context),
             buildListTile(
                 'Quản Lý Kho Hàng',
                 const FaIcon(FontAwesomeIcons.warehouse, color: Colors.white),
-                () {}),
+                () {},
+                context),
             buildListTile(
-                'Quản Lý Đối Tác',
-                const FaIcon(FontAwesomeIcons.handshake, color: Colors.white),
-                () {}),
+                'Quản lý cổng',
+                const FaIcon(FontAwesomeIcons.arrowsTurnToDots, color: Colors.white),
+                () {},
+                context),
             buildListTile(
-                'Quản Lý Báo Cáo',
-                const FaIcon(FontAwesomeIcons.fileInvoiceDollar,
+                'Quản lý phương tiện',
+                const FaIcon(FontAwesomeIcons.truckMoving,
                     color: Colors.white),
-                () {}),
+                () {},
+                context),
             buildListTile(
                 'Quản Lý Hệ Thống',
                 const FaIcon(FontAwesomeIcons.cogs, color: Colors.white),
-                () {}),
+                () {},
+                context),
             buildListTile('Đăng Xuất',
                 const FaIcon(FontAwesomeIcons.signOutAlt, color: Colors.white),
                 () {
               handleLogout();
-            }),
+            }, context),
           ],
         ),
       ),
     );
   }
 
-  ListTile buildListTile(String title, FaIcon icon, Function onTap) {
+  ListTile buildListTile(
+      String title, FaIcon icon, Function onTap, BuildContext context) {
     return ListTile(
       horizontalTitleGap: 10,
       contentPadding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -130,6 +143,9 @@ class SideMenu extends StatelessWidget {
       ),
       onTap: () {
         onTap();
+        ScreenResponsive.isTablet(context) || ScreenResponsive.isMobile(context)
+            ? Get.back()
+            : null;
       },
     );
   }

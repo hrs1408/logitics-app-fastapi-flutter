@@ -25,4 +25,10 @@ class AppColors {
 
   static const Color secondaryYellow = Color(0xFFFED801);
   static const Color primaryBlue = Color(0xFF00428D);
+
+  static const Color primaryColor = Color(0xFF24AFC1);
+  static const Color primaryColorHover = Color(0xFF1795A8);
+  static const Color secondaryColor = Color(0xFFFFCF47);
+  static const Color primaryBackground = Color(0xFFF8F8F8);
+  static const Color primaryBackgroundHover = Color(0xFFEDEDED);
 }
