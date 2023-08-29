@@ -86,11 +86,10 @@ class SideMenu extends StatelessWidget {
                 () {
               onTap(2);
             }, context),
-            buildListTile(
-                'Quản lý chi nhánh',
-                const FaIcon(FontAwesomeIcons.city, color: Colors.white),
-                () {},
-                context),
+            buildListTile('Quản lý chi nhánh',
+                const FaIcon(FontAwesomeIcons.city, color: Colors.white), () {
+              onTap(3);
+            }, context),
             buildListTile(
                 'Quản lý trụ sở',
                 const FaIcon(FontAwesomeIcons.building, color: Colors.white),
@@ -103,13 +102,13 @@ class SideMenu extends StatelessWidget {
                 context),
             buildListTile(
                 'Quản lý cổng',
-                const FaIcon(FontAwesomeIcons.arrowsTurnToDots, color: Colors.white),
+                const FaIcon(FontAwesomeIcons.arrowsTurnToDots,
+                    color: Colors.white),
                 () {},
                 context),
             buildListTile(
                 'Quản lý phương tiện',
-                const FaIcon(FontAwesomeIcons.truckMoving,
-                    color: Colors.white),
+                const FaIcon(FontAwesomeIcons.truckMoving, color: Colors.white),
                 () {},
                 context),
             buildListTile(

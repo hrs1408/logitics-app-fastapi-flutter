@@ -4,6 +4,7 @@ import 'package:app/resources/app_http.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/dto/user_create.dart';
+import '../models/dto/user_update.dart';
 
 class UserService {
   Future<dynamic> getUsers(String token) async {
@@ -65,6 +66,18 @@ class UserService {
       "Content-Type": "application/json",
       "Authorization": "Bearer $token"
     });
+    return response;
+  }
+
+  Future<dynamic> updateUser(String token,UserUpdate user, int id) async {
+    var body = jsonEncode(user);
+    var response = await http.put(
+        Uri.parse('${AppHttp.baseUrl}/user/update-user-information-all/$id'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: body);
     return response;
   }
 }

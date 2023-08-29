@@ -61,4 +61,17 @@ flutter:
           weight: 100
   assets:
     - assets/images/login.png
+    - lib/screens/
+    - lib/screens/home/
+    - lib/screens/login/
+    - lib/screens/panel/
+    - lib/screens/panel/client_panel/
+    - lib/screens/panel/driver_panel/
+    - lib/screens/panel/manager_panel/
+    - lib/screens/panel/delivery_panel/
+    - lib/screens/panel/warehouse_panel/
+    - lib/screens/register/
+    - lib/screens/dashboard/
+    - lib/screens/user_manager/
+    - lib/screens/position_manager/
 

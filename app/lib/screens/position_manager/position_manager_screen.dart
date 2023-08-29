@@ -99,30 +99,27 @@ class PositionManagerScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const HeaderDashboard(title: 'Quản lý vị trí công việc'),
-              const SizedBox(height: 40),
-              const Text('Danh sách các vị trí',
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: ScreenResponsive.isDesktop(context) ? 10 : 0,
-                    vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                              const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10)),
-                          backgroundColor:
-                              MaterialStateProperty.all(AppColors.primaryBlue)),
-                      onPressed: () {
-                        showCreatePositionDialog();
-                      },
-                      child: const Text('Thêm vị trí'),
-                    ),
-                  ],
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Quản lý vị trí công việc',
+                      style: TextStyle(fontSize: 24, color: Colors.white)),
+                  ElevatedButton(
+                    onPressed: () {
+                      showCreatePositionDialog();
+                    },
+                    style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10)),
+                        backgroundColor:
+                            MaterialStateProperty.all(AppColors.primaryBlue)),
+                    child: const Text('Thêm vị trí'),
+                  ),
+                ],
               ),
               GridView(
                 padding: const EdgeInsets.only(top: 20),

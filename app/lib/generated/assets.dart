@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String branchManagerBranchManagerScreen = 'lib/screens/branch_manager/branch_manager_screen.dart';
   static const String chartLineChart = 'lib/widgets/chart/line_chart.dart';
   static const String chartPieChart = 'lib/widgets/chart/pie_chart.dart';
   static const String chartTotalCodChart = 'lib/widgets/chart/total_cod_chart.dart';
@@ -13,7 +14,6 @@ class Assets {
   static const String controllersUserController = 'lib/controllers/user_controller.dart';
   static const String controllersUtils = 'lib/controllers/utils.dart';
   static const String dashboardBannerSlicerWidget = 'lib/screens/dashboard/banner_slicer_widget.dart';
-  static const String dashboardBottomTable.widget = 'lib/screens/dashboard/bottom_table.widget.dart';
   static const String dashboardBoxChartWidget = 'lib/screens/dashboard/box_chart_widget.dart';
   static const String dashboardDashBoardScreen = 'lib/screens/dashboard/dash_board_screen.dart';
   static const String dashboardHeaderDashboardWidget = 'lib/screens/dashboard/header_dashboard_widget.dart';
@@ -21,8 +21,10 @@ class Assets {
   static const String deliveryPanelDeliveryPanel = 'lib/screens/panel/delivery_panel/delivery_panel.dart';
   static const String driverPanelDriverPanel = 'lib/screens/panel/driver_panel/driver_panel.dart';
   static const String dtoUserCreate = 'lib/models/dto/user_create.dart';
+  static const String dtoUserUpdate = 'lib/models/dto/user_update.dart';
   static const String exportSaveFileMobile = 'lib/common/export/save_file_mobile.dart';
   static const String exportSaveFileWeb = 'lib/common/export/save_file_web.dart';
+  static const String generatedAssets = 'lib/generated/assets.dart';
   static const String homeCarouselBannerWidget = 'lib/screens/home/carousel_banner_widget.dart';
   static const String homeContactLanguageWidget = 'lib/screens/home/contact_language_widget.dart';
   static const String homeDeliveryServiceWidget = 'lib/screens/home/delivery_service_widget.dart';

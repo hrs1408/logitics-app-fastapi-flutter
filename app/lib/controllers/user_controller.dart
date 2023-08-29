@@ -4,6 +4,7 @@ import 'package:app/services/user_service.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/dto/user_update.dart';
 import '../resources/user_data.dart';
 import '../models/user.dart';
 import '../widgets/snack_bar/get_snack_bar.dart';
@@ -81,9 +82,9 @@ class UserController extends GetxController {
       var response = await UserService().createNewUser(token, userCreate);
       if (response.statusCode == 200) {
         getUsers();
-        Get.snackbar('Success', 'User created successfully');
+        getSnackBarLight('Success', 'User created successfully');
       } else {
-        Get.snackbar('Error', response.statusCode.toString());
+        getSnackBarLight('Error', response.statusCode.toString());
       }
     } finally {
       isLoading.value = false;
@@ -97,9 +98,9 @@ class UserController extends GetxController {
       var response = await UserService().deleteUser(token, id);
       if (response.statusCode == 200) {
         getUsers();
-        Get.snackbar('Success', 'User deleted successfully');
+        getSnackBarLight('Success', 'User deleted successfully');
       } else {
-        Get.snackbar('Error', response.statusCode.toString());
+        getSnackBarLight('Error', response.statusCode.toString());
       }
     } finally {
       isLoading.value = false;
@@ -133,6 +134,25 @@ class UserController extends GetxController {
       } else {
         getSnackBarLight('Lỗi', response.statusCode.toString());
       }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void updateUser(UserUpdate userUpdate, int id) async {
+    try {
+      isLoading.value = true;
+      String token = await getToken();
+      var response = await UserService().updateUser(token, userUpdate, id);
+      if (response.statusCode == 200) {
+        getUsers();
+        getSnackBarLight('Thành công!', 'Cập nhật tài khoản thành công');
+      } else {
+        getSnackBarLight('Lỗi', response.statusCode.toString());
+      }
+    } catch (e) {
+      isLoading.value = false;
+      getSnackBarLight('Error', e.toString());
     } finally {
       isLoading.value = false;
     }

@@ -13,6 +13,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
+import '../../models/dto/user_update.dart';
 import '../../models/user.dart';
 import '../dashboard/header_dashboard_widget.dart';
 
@@ -68,10 +69,43 @@ class UserManagerScreen extends StatelessWidget {
       }
     }
 
-    void handleEditUser() {}
+    void handleEditUser(int userId) {
+      if (fullNameTextController.text.isEmpty ||
+          emailTextController.text.isEmpty ||
+          phoneNumberTextController.text.isEmpty ||
+          identityCardCodeTextController.text.isEmpty ||
+          dateOfBirthTextController.text.isEmpty) {
+        getSnackBarLight('Lỗi', 'Vui lòng điền đầy đủ các thông tin.');
+      } else {
+        try {
+          userController.updateUser(
+              UserUpdate(
+                email: emailTextController.text,
+                fullName: fullNameTextController.text,
+                userRole: role.value,
+                userPositionId: positionId.value,
+                phoneNumber: phoneNumberTextController.text,
+                identityCardCode: identityCardCodeTextController.text,
+                dateOfBirth: dateOfBirthTextController.text,
+              ),
+              userId);
+        } catch (e) {
+          getSnackBarLight('Lỗi', 'Có lỗi xảy ra. Vui lòng thử lại sau.');
+        } finally {
+          fullNameTextController.clear();
+          emailTextController.clear();
+          phoneNumberTextController.clear();
+          identityCardCodeTextController.clear();
+          dateOfBirthTextController.clear();
+          role.value = 'client';
+          positionId.value = 6;
+        }
+      }
+    }
 
-    void showFormEditDialog(int id) {
-      User user = userController.users.firstWhere((user) => user.id == id);
+    void showFormEditDialog(int userId) {
+      userController.getUsers();
+      User user = userController.users.firstWhere((user) => user.id == userId);
       fullNameTextController.text = user.userInformation.fullName;
       emailTextController.text = user.email;
       role.value = user.userRole;
@@ -134,7 +168,7 @@ class UserManagerScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              buildFormMethod(handleEditUser),
+              buildFormMethod(handleEditUser, userId),
             ],
           ),
         ),
@@ -190,7 +224,7 @@ class UserManagerScreen extends StatelessWidget {
               const SizedBox(height: 20),
               buildSelectPosition(positionId, positionController),
               const SizedBox(height: 20),
-              buildFormMethod(handleCreateUser),
+              buildFormMethod(handleCreateUser, null),
             ],
           ),
         ),
@@ -536,13 +570,13 @@ class UserManagerScreen extends StatelessWidget {
     )));
   }
 
-  Row buildFormMethod(Function handle) {
+  Row buildFormMethod(Function handle, int? params) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         ElevatedButton(
           onPressed: () {
-            handle();
+            params != null ? handle(params) : handle();
           },
           style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0XFF00428D),

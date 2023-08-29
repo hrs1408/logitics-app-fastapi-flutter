@@ -1,3 +1,4 @@
+import 'package:app/screens/branch_manager/branch_manager_screen.dart';
 import 'package:app/screens/dashboard/dash_board_screen.dart';
 import 'package:app/screens/position_manager/position_manager_screen.dart';
 import 'package:app/screens/user_manager/user_manager_screen.dart';
@@ -9,7 +10,8 @@ class TabControllerE extends GetxController {
   List<StatelessWidget> tabs = [
     const DashboardScreen(),
     const UserManagerScreen(),
-    const PositionManagerScreen()
+    const PositionManagerScreen(),
+    const BranchManagerScreen(),
   ];
 
   void changeTabIndex(int index) {
@@ -21,6 +23,9 @@ class TabControllerE extends GetxController {
         currentIndex.value = index;
         break;
       case 2:
+        currentIndex.value = index;
+        break;
+      case 3:
         currentIndex.value = index;
         break;
       default:
