@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String branchManagerBranchDetailsScreen = 'lib/screens/branch_manager/branch_details_screen.dart';
   static const String branchManagerBranchManagerScreen = 'lib/screens/branch_manager/branch_manager_screen.dart';
   static const String chartLineChart = 'lib/widgets/chart/line_chart.dart';
   static const String chartPieChart = 'lib/widgets/chart/pie_chart.dart';
@@ -10,10 +11,12 @@ class Assets {
   static const String controllersAuthController = 'lib/controllers/auth_controller.dart';
   static const String controllersDrawerController = 'lib/controllers/drawer_controller.dart';
   static const String controllersPositionController = 'lib/controllers/position_controller.dart';
+  static const String controllersProvinceController = 'lib/controllers/province_controller.dart';
   static const String controllersTabController = 'lib/controllers/tab_controller.dart';
   static const String controllersUserController = 'lib/controllers/user_controller.dart';
   static const String controllersUtils = 'lib/controllers/utils.dart';
   static const String dashboardBannerSlicerWidget = 'lib/screens/dashboard/banner_slicer_widget.dart';
+  static const String dashboardBottomTable.widget = 'lib/screens/dashboard/bottom_table.widget.dart';
   static const String dashboardBoxChartWidget = 'lib/screens/dashboard/box_chart_widget.dart';
   static const String dashboardDashBoardScreen = 'lib/screens/dashboard/dash_board_screen.dart';
   static const String dashboardHeaderDashboardWidget = 'lib/screens/dashboard/header_dashboard_widget.dart';
@@ -56,6 +59,7 @@ class Assets {
   static const String screensMainScreen = 'lib/screens/main_screen.dart';
   static const String servicesAuthService = 'lib/services/auth_service.dart';
   static const String servicesPositionService = 'lib/services/position_service.dart';
+  static const String servicesProvinceService = 'lib/services/province_service.dart';
   static const String servicesUserService = 'lib/services/user_service.dart';
   static const String sideMenuSideMenu = 'lib/widgets/side_menu/side_menu.dart';
   static const String snackBarGetSnackBar = 'lib/widgets/snack_bar/get_snack_bar.dart';
