@@ -4,7 +4,8 @@ from models.vehicle import Vehicle
 from repositories.base_repository import BaseRepository
 
 
-git 
+class VehicleRepository(BaseRepository):
+
     @staticmethod
     def find_by_tonnage(db: Session, tonnage):
         return db.query(Vehicle).filter(Vehicle.tonnage == tonnage).all()
