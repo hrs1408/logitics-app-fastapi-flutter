@@ -29,3 +29,16 @@ class InvoiceSchema(InvoiceSchemaBase):
 
     class Config:
         orm_mode = True
+
+
+class InvoiceCreateSchema(InvoiceSchemaBase):
+    user_id: int
+    headquarter_id: int
+    port_id: int
+    delivery_status: str
+    pick_up_staff_id: int
+    delivery_staff_id: int
+    vehicle_id: int
+
+
+

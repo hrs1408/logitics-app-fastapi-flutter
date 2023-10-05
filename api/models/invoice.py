@@ -74,10 +74,12 @@ class Voyage(Base):
     delivery_status = Column(String(255), default=DeliveryStatus.CREATED, nullable=False)
     pickup_staff_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     delivery_staff_id = Column(Integer, ForeignKey('users.id'), nullable=True)
-
+    vehicle_id = Column(Integer, ForeignKey('vehicles.id'), nullable=True)
+    
     invoice = relationship("Invoice", back_populates="voyages", uselist=False)
     port = relationship("Port", back_populates="voyages", uselist=False)
     headquarter = relationship("Headquarter", back_populates="voyages", uselist=False)
     pickup_staff = relationship("User", foreign_keys=[pickup_staff_id], back_populates="pickup_voyages", uselist=False)
     delivery_staff = relationship("User", foreign_keys=[delivery_staff_id], back_populates="delivery_voyages",
                                   uselist=False)
+    vehicle = relationship("Vehicle", back_populates="voyages", uselist=False)

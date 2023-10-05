@@ -18,6 +18,10 @@ class VoyageRepository(BaseRepository):
     def find_by_port_id(db: Session, port_id):
         return db.query(Voyage).filter(Voyage.port_id == port_id).all()
 
+    @staticmethod
+    def find_by_invoice_id(db: Session, invoice_id):
+        return db.query(Voyage).filter(Voyage.invoice_id == invoice_id).all()
+
 
 class InvoiceRepository(BaseRepository):
 

@@ -6,6 +6,7 @@ class VoyageSchemaBase(BaseModel):
     delivery_staff_id: int
     delivery_status: str
     headquarter_id: int
+    vehicle_id: int
     port_id: int
 
 

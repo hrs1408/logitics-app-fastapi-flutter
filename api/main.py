@@ -12,6 +12,7 @@ from repositories.timekeeping_detail_route import timekeeping_detail_route
 from routes.auth_route import auth
 from routes.branch_route import branch_r
 from routes.headquarter_route import headquarter_route
+from routes.invoice_route import invoice_route
 from routes.port_route import port_route
 from routes.position_route import position
 from routes.timekeeping_route import timekeeping_route
@@ -117,4 +118,5 @@ app.include_router(prefix="/api", router=port_route)
 app.include_router(prefix="/api", router=vehicle_route)
 app.include_router(prefix="/api", router=timekeeping_route)
 app.include_router(prefix="/api", router=timekeeping_detail_route)
+app.include_router(prefix="/api", router=invoice_route)
 app.mount("/medias", StaticFiles(directory="medias"), name="medias")
