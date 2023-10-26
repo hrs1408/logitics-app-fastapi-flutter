@@ -49,7 +49,9 @@ def create_vehicle(branch_id: int, vehicle: VehicleBase, id: int = Depends(get_c
     vehicle_ct = Vehicle(
         tonnage=vehicle.tonnage,
         vehicle_type=vehicle.vehicle_type,
-        branch_id=branch_id
+        branch_id=branch_id,
+        statusOfVehicle=vehicle.statusOfVehicle,
+        currentTonage=vehicle.currentTonage
     )
     vehicle_ctd = VehicleRepository.insert(db, vehicle_ct)
     return ResponseSchema.from_api_route(status_code=201, data=vehicle_ctd).dict(exclude_none=True)

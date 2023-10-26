@@ -51,6 +51,7 @@ def create_user(user: UserAdminCreateSchema, id: int = Depends(get_current_user)
         hashed_password=pwd_context.hash(user.password),
         user_role=user.user_role,
         user_position_id=user.user_position_id,
+        branch_id=user.branch_id
     )
     new_user = UserRepository.insert(db, user_ct)
     user_info_ct = UserInformation(

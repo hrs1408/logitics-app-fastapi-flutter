@@ -66,3 +66,9 @@ def delete_branch(branch_id: int, id: int = Depends(get_current_user), db: Sessi
         raise HTTPException(status_code=404, detail="Branch not found")
     BranchRepository.delete(db, branch)
     return ResponseSchema.from_api_route(status_code=200, data="Delete branch success").dict(exclude_none=True)
+
+@branch_r.get("/search/{branch_name}", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[List[BranchSchema]])
+def search_branch(branch_name: str, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
+    check_permission_role_supper_admin(id=id, db=db)
+    branches = BranchRepository.search(db, branch_name)
+    return ResponseSchema.from_api_route(status_code=200, data=branches).dict(exclude_none=True)

@@ -2,6 +2,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
+from schemas.user_schema import UserSchema
+from schemas.vehicle_schema import VehicleSchema
+
 
 class PortBase(BaseModel):
     port_name: str
@@ -51,6 +54,8 @@ class BranchSchemaBase(BaseModel):
 class BranchSchema(BranchSchemaBase):
     id: int
     headquarters: Optional[List['HeadquarterSchema']]
+    vehicles: Optional[List['VehicleSchema']]
+    users: Optional[List['UserSchema']]
 
     class Config:
         orm_mode = True

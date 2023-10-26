@@ -14,6 +14,10 @@ class BranchRepository(BaseRepository):
     def find_by_province(db: Session, province):
         return db.query(Branch).filter(Branch.province == province).all()
 
+    @staticmethod
+    def search(db: Session, keyword):
+        return db.query(Branch).filter(Branch.province.contains(keyword)).all()
+
 
 class HeadquarterRepository(BaseRepository):
 

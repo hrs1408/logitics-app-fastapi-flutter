@@ -80,6 +80,7 @@ class UserAdminCreateSchema(BaseModel):
     confirm_password: str
     user_role: str
     user_position_id: int
+    branch_id: Optional[int]
 
     @root_validator()
     def validate_password(cls, values):

@@ -15,7 +15,9 @@ class Vehicle(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     tonnage = Column(Integer, nullable=False)
+    currentTonage = Column(Integer, nullable=False)
     vehicle_type = Column(String(255), default=VehicleType.TRUCK, nullable=False)
+    statusOfVehicle = Column(String(255), nullable=False)
     branch_id = Column(Integer, ForeignKey('branches.id'), nullable=False)
 
     users = relationship("User", back_populates="vehicles", uselist=True)
