@@ -23,24 +23,23 @@ invoice_route = APIRouter(
 )
 
 
-@invoice_route.get("/", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[List[InvoiceSchema]])
+@invoice_route.get("/", dependencies=[Depends(JWTBearer())])
 def get_all_invoice(id: int = Depends(get_current_user), db: Session = Depends(get_db)):
     check_permission_role_admin(id=id, db=db)
-    invoices = InvoiceRepository.find_all(db, InvoiceSchema)
+    invoices = InvoiceRepository.find_all(db, Invoice)
     return ResponseSchema.from_api_route(status_code=200, data=invoices).dict(exclude_none=True)
 
 
-@invoice_route.get("/{invoice_id}", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[InvoiceSchema])
+@invoice_route.get("/{invoice_id}", dependencies=[Depends(JWTBearer())])
 def get_invoice_by_id(invoice_id: int, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
     check_permission_role_admin(id=id, db=db)
-    invoice = InvoiceRepository.find_by_id(db, InvoiceSchema, invoice_id)
+    invoice = InvoiceRepository.find_by_id(db, Invoice, invoice_id)
     if not invoice:
         raise HTTPException(status_code=404, detail="Invoice not found")
     return ResponseSchema.from_api_route(status_code=200, data=invoice).dict(exclude_none=True)
 
 
-@invoice_route.get("/user/{user_id}", dependencies=[Depends(JWTBearer())],
-                   response_model=ResponseSchema[List[InvoiceSchema]])
+@invoice_route.get("/user/{user_id}", dependencies=[Depends(JWTBearer())])
 def get_invoice_by_user_id(user_id: int, db: Session = Depends(get_db)):
     invoices = InvoiceRepository.find_by_user_id(db, user_id)
     if not invoices:
@@ -48,8 +47,7 @@ def get_invoice_by_user_id(user_id: int, db: Session = Depends(get_db)):
     return ResponseSchema.from_api_route(status_code=200, data=invoices).dict(exclude_none=True)
 
 
-@invoice_route.get("/delivery-status/{delivery_status}", dependencies=[Depends(JWTBearer())],
-                   response_model=ResponseSchema[List[InvoiceSchema]])
+@invoice_route.get("/delivery-status/{delivery_status}", dependencies=[Depends(JWTBearer())])
 def get_invoice_by_delivery_status(delivery_status: str, db: Session = Depends(get_db)):
     voyages = VoyageRepository.find_by_delivery_status(db, delivery_status)
     if not voyages:
@@ -61,7 +59,7 @@ def get_invoice_by_delivery_status(delivery_status: str, db: Session = Depends(g
     return ResponseSchema.from_api_route(status_code=200, data=invoices).dict(exclude_none=True)
 
 
-@invoice_route.post("/create", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[InvoiceSchema])
+@invoice_route.post("/create", dependencies=[Depends(JWTBearer())])
 def create_invoice(invoice_create: InvoiceCreateSchema, db: Session = Depends(get_db)):
     user = UserRepository.find_by_id(db, User, invoice_create.user_id)
     if not user:
@@ -72,19 +70,19 @@ def create_invoice(invoice_create: InvoiceCreateSchema, db: Session = Depends(ge
     headquarter = HeadquarterRepository.find_by_id(db, Headquarter, invoice_create.headquarter_id)
     if not headquarter:
         raise HTTPException(status_code=404, detail="Headquarter not found")
-    if invoice_create.shipping_type != "fast" or invoice_create.shipping_type != "normal" or invoice_create.shipping_type != "slow":
+    if invoice_create.shipping_type != "fast" and invoice_create.shipping_type != "normal" and invoice_create.shipping_type != "slow":
         raise HTTPException(status_code=400, detail="Shipping type is invalid")
-    if invoice_create.kind_of_goods != "document" or invoice_create.kind_of_goods != "food" or invoice_create.kind_of_goods != "other":
+    if invoice_create.kind_of_goods != "document" and invoice_create.kind_of_goods != "food" and invoice_create.kind_of_goods != "other":
         raise HTTPException(status_code=400, detail="Kind of goods is invalid")
-    if invoice_create.payment != "payment_sender" or invoice_create.payment != "payment_receiver":
+    if invoice_create.payment != "payment_sender" and invoice_create.payment != "payment_receiver":
         raise HTTPException(status_code=400, detail="Payment is invalid")
-    if invoice_create.show_goods != "dstg" or invoice_create.show_goods != "stg" or invoice_create.show_goods != "ttg":
+    if invoice_create.show_goods != "dstg" and invoice_create.show_goods != "stg" and invoice_create.show_goods != "ttg":
         raise HTTPException(status_code=400, detail="Show goods is invalid")
-    if invoice_create.delivery_status != "created" or invoice_create.delivery_status != "shipping" or invoice_create.delivery_status != "delivered" or invoice_create.delivery_status != "canceled":
+    if invoice_create.delivery_status != "created" and invoice_create.delivery_status != "shipping" and invoice_create.delivery_status != "delivered" and invoice_create.delivery_status != "canceled":
         raise HTTPException(status_code=400, detail="Delivery status is invalid")
-    invoice_create = Invoice(
+    invoice_created = Invoice(
         user_id=invoice_create.user_id,
-        user_address=invoice_create.user_address_id,
+        user_address_id=invoice_create.user_address_id,
         rcv_full_name=invoice_create.rcv_full_name,
         rcv_phone_number=invoice_create.rcv_phone,
         rcv_address=invoice_create.rcv_address,
@@ -95,21 +93,22 @@ def create_invoice(invoice_create: InvoiceCreateSchema, db: Session = Depends(ge
         width=invoice_create.width,
         height=invoice_create.height,
         quantity=invoice_create.quantity,
+        length=invoice_create.length,
         commodity_value=invoice_create.commodity_value,
-        code_money=invoice_create.cod_money,
+        cod_money=invoice_create.cod_money,
         kind_of_goods=invoice_create.kind_of_goods,
         payment=invoice_create.payment,
         show_goods=invoice_create.show_goods,
         requirement_other=invoice_create.requirement_other,
         paided=invoice_create.paided
     )
-    invoice_ctd = InvoiceRepository.insert(db, invoice_create)
+    invoice_ctd = InvoiceRepository.insert(db, invoice_created)
     voyage_create = Voyage(
         invoice_id=invoice_ctd.id,
         headquarter_id=invoice_create.headquarter_id,
         port_id=invoice_create.port_id,
         delivery_status=invoice_create.delivery_status,
-        pick_up_staff_id=invoice_create.pick_up_staff_id,
+        pickup_staff_id=invoice_create.pick_up_staff_id,
         delivery_staff_id=invoice_create.delivery_staff_id,
         vehicle_id=invoice_create.vehicle_id
     )

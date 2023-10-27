@@ -10,6 +10,7 @@ class InvoiceSchemaBase(BaseModel):
     shipping_type: str
     weight: int
     quantity: int
+    length: int
     commodity_value: int
     length: int
     width: int
@@ -33,12 +34,12 @@ class InvoiceSchema(InvoiceSchemaBase):
 
 class InvoiceCreateSchema(InvoiceSchemaBase):
     user_id: int
-    headquarter_id: int
     port_id: int
     delivery_status: str
     pick_up_staff_id: int
     delivery_staff_id: int
     vehicle_id: int
+    headquarter_id: int
 
 
 

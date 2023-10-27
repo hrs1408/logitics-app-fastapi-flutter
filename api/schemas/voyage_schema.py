@@ -1,8 +1,10 @@
 from pydantic import BaseModel
 
+from schemas.invoice_schema import InvoiceSchema
+
 
 class VoyageSchemaBase(BaseModel):
-    pick_up_staff_id: int
+    pickup_staff_id: int
     delivery_staff_id: int
     delivery_status: str
     headquarter_id: int
@@ -13,6 +15,6 @@ class VoyageSchemaBase(BaseModel):
 class VoyageSchema(VoyageSchemaBase):
     id: int
     invoice_id: int
-
     class Config:
         orm_mode = True
+

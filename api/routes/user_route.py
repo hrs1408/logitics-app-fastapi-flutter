@@ -117,7 +117,8 @@ def delete_user(user_id: int, id: int = Depends(get_current_user), db: Session =
     return ResponseSchema.from_api_route(status_code=200, data="Success").dict(exclude_none=True)
 
 
-@user_route.put('/user-info/{user_id}', dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[UserSchema])
+@user_route.put('/user-info/{user_id}', dependencies=[Depends(JWTBearer())],
+                response_model=ResponseSchema[UserInformationSchema])
 def update_user_info(user_id: int, user_info: UserInformationBase,
                      db: Session = Depends(get_db)):
     user = UserRepository.find_by_id(db, User, user_id)
