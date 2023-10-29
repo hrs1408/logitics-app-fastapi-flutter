@@ -40,6 +40,7 @@ class InvoiceCreateSchema(InvoiceSchemaBase):
     delivery_staff_id: int
     vehicle_id: int
     headquarter_id: int
+    fee: int
 
 
 

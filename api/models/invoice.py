@@ -58,6 +58,7 @@ class Invoice(Base):
     show_goods = Column(String(255), default=ShowGoods.DSTG, nullable=False)
     requirement_other = Column(String(255), default="", nullable=True)
     paided = Column(String(255), default=False, nullable=False)
+    fee = Column(Integer, default=0, nullable=False)
 
     user_address = relationship("UserAddress", back_populates="invoices", uselist=False)
     voyages = relationship("Voyage", back_populates="invoice", uselist=False)
@@ -75,7 +76,7 @@ class Voyage(Base):
     pickup_staff_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     delivery_staff_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     vehicle_id = Column(Integer, ForeignKey('vehicles.id'), nullable=True)
-    
+
     invoice = relationship("Invoice", back_populates="voyages", uselist=False)
     port = relationship("Port", back_populates="voyages", uselist=False)
     headquarter = relationship("Headquarter", back_populates="voyages", uselist=False)

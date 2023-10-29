@@ -100,7 +100,8 @@ def create_invoice(invoice_create: InvoiceCreateSchema, db: Session = Depends(ge
         payment=invoice_create.payment,
         show_goods=invoice_create.show_goods,
         requirement_other=invoice_create.requirement_other,
-        paided=invoice_create.paided
+        paided=invoice_create.paided,
+        fee=invoice_create.fee
     )
     invoice_ctd = InvoiceRepository.insert(db, invoice_created)
     voyage_create = Voyage(
@@ -116,8 +117,7 @@ def create_invoice(invoice_create: InvoiceCreateSchema, db: Session = Depends(ge
     return ResponseSchema.from_api_route(status_code=200, data=voyage_ctd).dict(exclude_none=True)
 
 
-@invoice_route.put("/change-status/{invoice_id}", dependencies=[Depends(JWTBearer())]
-                   , response_model=ResponseSchema[VoyageSchema])
+@invoice_route.put("/change-status/{invoice_id}", dependencies=[Depends(JWTBearer())])
 def change_status_invoice(invoice_id: int, status: VoyageSchemaBase, db: Session = Depends(get_db)):
     invoice = InvoiceRepository.find_by_id(db, Invoice, invoice_id)
     voyage = VoyageRepository.find_by_id(db, Voyage, invoice_id)
@@ -142,8 +142,8 @@ def change_status_invoice(invoice_id: int, status: VoyageSchemaBase, db: Session
     return ResponseSchema.from_api_route(status_code=200, data=voyage_etd).dict(exclude_none=True)
 
 
-@invoice_route.put("/change-port/{invoice_id}", dependencies=[Depends(JWTBearer())],
-                   response_model=ResponseSchema[VoyageSchema])
+@invoice_route.put("/change-port/{invoice_id}", dependencies=[Depends(JWTBearer())]
+                   )
 def change_port_invoice(invoice_id: int, port_id: int, db: Session = Depends(get_db)):
     invoice = InvoiceRepository.find_by_id(db, Invoice, invoice_id)
     if not invoice:
@@ -157,3 +157,14 @@ def change_port_invoice(invoice_id: int, port_id: int, db: Session = Depends(get
     voyage.port_id = port_id
     voyage_etd = VoyageRepository.update(db, voyage)
     return ResponseSchema.from_api_route(status_code=200, data=voyage_etd).dict(exclude_none=True)
+
+
+@invoice_route.get("/voyage/{invoice_id}", dependencies=[Depends(JWTBearer())])
+def get_voyage_by_invoice_id(invoice_id: int, db: Session = Depends(get_db)):
+    invoice = InvoiceRepository.find_by_id(db, Invoice, invoice_id)
+    if not invoice:
+        raise HTTPException(status_code=404, detail="Invoice not found")
+    voyage = VoyageRepository.find_by_invoice_id(db, invoice_id)
+    if not voyage:
+        raise HTTPException(status_code=404, detail="Voyage not found")
+    return ResponseSchema.from_api_route(status_code=200, data=voyage).dict(exclude_none=True)

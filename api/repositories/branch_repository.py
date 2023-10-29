@@ -29,6 +29,10 @@ class HeadquarterRepository(BaseRepository):
     def find_by_branch_id(db: Session, branch_id):
         return db.query(Headquarter).filter(Headquarter.branch_id == branch_id).all()
 
+    @staticmethod
+    def find_headquarter_and_branch(db: Session, branch_id):
+        return db.query(Headquarter, Branch).join(Branch).filter(Headquarter.branch_id == branch_id).first()
+
 
 class WarehouseRepository(BaseRepository):
 

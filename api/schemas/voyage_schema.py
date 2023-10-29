@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 
+from schemas.branch_schema import PortSchema, HeadquarterSchema
 from schemas.invoice_schema import InvoiceSchema
+from schemas.user_schema import UserSchema
+from schemas.vehicle_schema import VehicleSchema
 
 
 class VoyageSchemaBase(BaseModel):
@@ -15,6 +18,8 @@ class VoyageSchemaBase(BaseModel):
 class VoyageSchema(VoyageSchemaBase):
     id: int
     invoice_id: int
+
     class Config:
         orm_mode = True
+
 
