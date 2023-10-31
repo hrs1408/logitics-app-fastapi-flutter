@@ -16,8 +16,7 @@ branch_r = APIRouter(prefix="/branch", tags=["Branch"])
 
 
 @branch_r.get("/", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[List[BranchSchema]])
-def get_all_branch(id: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    check_permission_role_supper_admin(id=id, db=db)
+def get_all_branch(db: Session = Depends(get_db)):
     branches = BranchRepository.find_all(db, Branch)
     return ResponseSchema.from_api_route(status_code=200, data=branches).dict(exclude_none=True)
 
@@ -31,7 +30,7 @@ def get_branch_by_id(branch_id: int, id: int = Depends(get_current_user), db: Se
     return ResponseSchema.from_api_route(status_code=200, data=branch).dict(exclude_none=True)
 
 
-@branch_r.post("/", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[BranchSchema])
+@branch_r.post("/create", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[BranchSchema])
 def create_branch(branch: BranchSchemaBase, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
     check_permission_role_supper_admin(id=id, db=db)
     branch_ext = BranchRepository.find_by_name(db, branch.branch_name)
@@ -70,4 +69,9 @@ def delete_branch(branch_id: int, id: int = Depends(get_current_user), db: Sessi
 @branch_r.get("/search/{branch_name}", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[List[BranchSchema]])
 def search_branch(branch_name: str, db: Session = Depends(get_db)):
     branches = BranchRepository.search(db, branch_name)
+    return ResponseSchema.from_api_route(status_code=200, data=branches).dict(exclude_none=True)
+
+@branch_r.get("search-by-province/{province}", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[List[BranchSchema]])
+def search_branch_by_province(province: str, db: Session = Depends(get_db)):
+    branches = BranchRepository.find_by_province(db, province)
     return ResponseSchema.from_api_route(status_code=200, data=branches).dict(exclude_none=True)

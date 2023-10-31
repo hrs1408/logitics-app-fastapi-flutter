@@ -25,8 +25,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @user_route.get("/", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[List[UserSchema]])
-def get_all_user(id: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    check_permission_role_admin(id, db)
+def get_all_user(db: Session = Depends(get_db)):
     users = UserRepository.find_all(db, User)
     return ResponseSchema.from_api_route(status_code=200, data=users).dict(exclude_none=True)
 

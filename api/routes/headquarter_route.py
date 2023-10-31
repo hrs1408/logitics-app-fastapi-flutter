@@ -82,3 +82,12 @@ def delete_headquarter(headquarter_id: int, id: int = Depends(get_current_user),
         raise HTTPException(status_code=404, detail="Headquarter not found")
     HeadquarterRepository.delete(db, headquarter)
     return ResponseSchema.from_api_route(status_code=200, data=headquarter).dict(exclude_none=True)
+
+@headquarter_route.get("/by-branch/{branch_id}", dependencies=[Depends(JWTBearer())],
+                          response_model=ResponseSchema[List[HeadquarterSchema]])
+def get_headquarter_by_branch_id(branch_id: int, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
+    check_permission_role_admin(id=id, db=db)
+    headquarter = HeadquarterRepository.find_by_branch_id(db, branch_id)
+    if not headquarter:
+        raise HTTPException(status_code=404, detail="Headquarter not found")
+    return ResponseSchema.from_api_route(status_code=200, data=headquarter).dict(exclude_none=True)
