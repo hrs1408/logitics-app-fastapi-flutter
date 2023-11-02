@@ -35,7 +35,7 @@ def get_warehouse_by_id(warehouse_id: int, id: int = Depends(get_current_user), 
     return ResponseSchema.from_api_route(status_code=200, data=warehouse).dict(exclude_none=True)
 
 
-@warehouse_route.get("{branch_id}/branch", dependencies=[Depends(JWTBearer())],
+@warehouse_route.get("/branch/{branch_id}", dependencies=[Depends(JWTBearer())],
                      response_model=ResponseSchema[List[WarehouseSchema]])
 def get_warehouse_by_branch_id(branch_id: int, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
     check_permission_role_admin(id=id, db=db)

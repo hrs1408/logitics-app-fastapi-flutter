@@ -11,7 +11,7 @@ from repositories.branch_repository import HeadquarterRepository, PortRepository
 from repositories.invoice_repository import InvoiceRepository, VoyageRepository
 from repositories.jwt_repository import JWTBearer
 from repositories.user_repository import UserRepository, UserAddressRepository
-from schemas.invoice_schema import InvoiceSchema, InvoiceCreateSchema
+from schemas.invoice_schema import InvoiceSchema, InvoiceCreateSchema, ChangeStatusSchema
 from schemas.schema import ResponseSchema
 from schemas.voyage_schema import VoyageSchema, VoyageSchemaBase
 from ultis.permission import check_permission_role_admin
@@ -118,26 +118,26 @@ def create_invoice(invoice_create: InvoiceCreateSchema, db: Session = Depends(ge
 
 
 @invoice_route.put("/change-status/{invoice_id}", dependencies=[Depends(JWTBearer())])
-def change_status_invoice(invoice_id: int, status: VoyageSchemaBase, db: Session = Depends(get_db)):
+def change_status_invoice(invoice_id: int, status: ChangeStatusSchema, db: Session = Depends(get_db)):
     invoice = InvoiceRepository.find_by_id(db, Invoice, invoice_id)
-    voyage = VoyageRepository.find_by_id(db, Voyage, invoice_id)
+    voyage = VoyageRepository.find_by_invoice_id(db, invoice_id)
+    print(status)
     if not invoice or not voyage:
         raise HTTPException(status_code=404, detail="Invoice not found")
-    if status.delivery_status != "created" or status.delivery_status != "shipping" or status.delivery_status != "delivered" or status.delivery_status != "canceled":
+    if status.delivery_status != "created" and status.delivery_status != "shipping" and status.delivery_status != "delivered" and status.delivery_status != "canceled":
         raise HTTPException(status_code=400, detail="Delivery status is invalid")
-    if status.delivery_status == "took_goods":
-        if not status.pick_up_staff_id:
-            raise HTTPException(status_code=400, detail="Pick up staff id is invalid")
-    if status.delivery_status == "shipping":
-        if not status.pick_up_staff_id or not status.vehicle_id:
-            raise HTTPException(status_code=400, detail="Pick up staff id or vehicle id is invalid")
-    if status.delivery_status == "delivered":
-        if not status.delivery_staff_id:
-            raise HTTPException(status_code=400, detail="Delivery staff id is invalid")
     voyage.delivery_status = status.delivery_status
-    voyage.pickup_staff_id = status.pick_up_staff_id
-    voyage.delivery_staff_id = status.delivery_staff_id
-    voyage.vehicle_id = status.vehicle_id
+    voyage_etd = VoyageRepository.update(db, voyage)
+    return ResponseSchema.from_api_route(status_code=200, data=voyage_etd).dict(exclude_none=True)
+
+
+@invoice_route.put("/cancel/{invoice_id}", dependencies=[Depends(JWTBearer())])
+def cancel_invoice(invoice_id: int, db: Session = Depends(get_db)):
+    invoice = InvoiceRepository.find_by_id(db, Invoice, invoice_id)
+    voyage = VoyageRepository.find_by_invoice_id(db, invoice_id)
+    if not invoice or not voyage:
+        raise HTTPException(status_code=404, detail="Invoice not found")
+    voyage.delivery_status = "canceled"
     voyage_etd = VoyageRepository.update(db, voyage)
     return ResponseSchema.from_api_route(status_code=200, data=voyage_etd).dict(exclude_none=True)
 
@@ -168,3 +168,17 @@ def get_voyage_by_invoice_id(invoice_id: int, db: Session = Depends(get_db)):
     if not voyage:
         raise HTTPException(status_code=404, detail="Voyage not found")
     return ResponseSchema.from_api_route(status_code=200, data=voyage).dict(exclude_none=True)
+
+
+@invoice_route.get("/invoice/branch/{branch_id}", dependencies=[Depends(JWTBearer())])
+def get_voyage_by_branch_id(branch_id: int, db: Session = Depends(get_db)):
+    headquarters = HeadquarterRepository.find_by_branch_id(db, branch_id)
+    if not headquarters:
+        raise HTTPException(status_code=404, detail="Headquarter not found")
+    invoices = []
+    for headquarter in headquarters:
+        voyages = VoyageRepository.find_by_headquarter_id(db, headquarter.id)
+        for voyage in voyages:
+            invoice = InvoiceRepository.find_by_id(db, Invoice, voyage.invoice_id)
+            invoices.append(invoice)
+    return ResponseSchema.from_api_route(status_code=200, data=invoices).dict(exclude_none=True)

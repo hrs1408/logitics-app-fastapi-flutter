@@ -43,4 +43,5 @@ class InvoiceCreateSchema(InvoiceSchemaBase):
     fee: int
 
 
-
+class ChangeStatusSchema(BaseModel):
+    delivery_status: str

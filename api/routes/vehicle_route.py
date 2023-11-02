@@ -81,3 +81,13 @@ def delete_vehicle(vehicle_id: int, id: int = Depends(get_current_user), db: Ses
         raise HTTPException(status_code=404, detail="Vehicle not found")
     VehicleRepository.delete(db, vehicle)
     return ResponseSchema.from_api_route(status_code=200, data=vehicle).dict(exclude_none=True)
+
+
+@vehicle_route.get("/by-branch/{branch_id}", dependencies=[Depends(JWTBearer())],
+                   response_model=ResponseSchema[List[VehicleSchema]])
+def get_vehicle_by_branch_id(branch_id: int, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
+    check_permission_role_admin(id=id, db=db)
+    vehicles = VehicleRepository.find_by_branch_id(db, branch_id)
+    if not vehicles:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
+    return ResponseSchema.from_api_route(status_code=200, data=vehicles).dict(exclude_none=True)

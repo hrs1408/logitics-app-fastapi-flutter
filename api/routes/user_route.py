@@ -12,7 +12,7 @@ from repositories.user_repository import UserRepository, UserInformationReposito
 from schemas.schema import ResponseSchema
 from schemas.user_schema import UserSchema, UserAdminCreateSchema, UserInformationSchema, UserAddressSchema, \
     UserBankAccountSchema, UserInformationBase, UserAdminUpdateSchema, UserAddressBase, UserBankAccountBase, \
-    UserUpdateAllSchema
+    UserUpdateAllSchema, UserCreateFullSchema
 from ultis.permission import check_permission_role_admin
 from ultis.security import get_current_user
 
@@ -56,6 +56,31 @@ def create_user(user: UserAdminCreateSchema, id: int = Depends(get_current_user)
     user_info_ct = UserInformation(
         user_id=new_user.id,
         full_name=user.full_name,
+    )
+    UserInformationRepository.insert(db, user_info_ct)
+    return ResponseSchema.from_api_route(status_code=200, data=new_user).dict(exclude_none=True)
+
+
+@user_route.post('/create-user', dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[UserSchema])
+def create_user(user: UserCreateFullSchema, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
+    check_permission_role_admin(id, db)
+    is_email_already_exist = UserRepository.find_by_email(db, user.email)
+    if is_email_already_exist:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    user_ct = User(
+        email=user.email,
+        hashed_password=pwd_context.hash(user.password),
+        user_role=user.user_role,
+        user_position_id=user.user_position_id,
+        branch_id=user.branch_id
+    )
+    new_user = UserRepository.insert(db, user_ct)
+    user_info_ct = UserInformation(
+        user_id=new_user.id,
+        full_name=user.full_name,
+        phone_number=user.phone_number,
+        date_of_birth=user.date_of_birth,
+        identity_card_code=user.identity_card_code
     )
     UserInformationRepository.insert(db, user_info_ct)
     return ResponseSchema.from_api_route(status_code=200, data=new_user).dict(exclude_none=True)
