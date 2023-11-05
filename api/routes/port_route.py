@@ -78,3 +78,10 @@ def delete_port(port_id: int, id: int = Depends(get_current_user), db: Session =
         raise HTTPException(status_code=404, detail="Port not found")
     PortRepository.delete(db, port)
     return ResponseSchema.from_api_route(status_code=200, data=port).dict(exclude_none=True)
+
+
+@port_route.get("/warehouse/{warehouse_id}", dependencies=[Depends(JWTBearer())],
+                response_model=ResponseSchema[List[PortSchema]])
+def get_port_by_warehouse_id(warehouse_id: int, db: Session = Depends(get_db)):
+    ports = PortRepository.find_by_warehouse_id(db, warehouse_id)
+    return ResponseSchema.from_api_route(status_code=200, data=ports).dict(exclude_none=True)

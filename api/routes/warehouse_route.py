@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from config import get_db
-from models.branch import Warehouse, Branch
+from models.branch import Warehouse, Branch, Port
 from repositories.branch_repository import WarehouseRepository, BranchRepository, PortRepository
 from repositories.jwt_repository import JWTBearer
 from schemas.branch_schema import WarehouseSchema, WarehouseBase
@@ -19,8 +19,7 @@ warehouse_route = APIRouter(
 
 
 @warehouse_route.get("/", dependencies=[Depends(JWTBearer())], response_model=ResponseSchema[List[WarehouseSchema]])
-def get_all_warehouse(id: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    check_permission_role_admin(id=id, db=db)
+def get_all_warehouse(db: Session = Depends(get_db)):
     warehouses = WarehouseRepository.find_all(db, Warehouse)
     return ResponseSchema.from_api_route(status_code=200, data=warehouses).dict(exclude_none=True)
 
@@ -37,8 +36,7 @@ def get_warehouse_by_id(warehouse_id: int, id: int = Depends(get_current_user), 
 
 @warehouse_route.get("/branch/{branch_id}", dependencies=[Depends(JWTBearer())],
                      response_model=ResponseSchema[List[WarehouseSchema]])
-def get_warehouse_by_branch_id(branch_id: int, id: int = Depends(get_current_user), db: Session = Depends(get_db)):
-    check_permission_role_admin(id=id, db=db)
+def get_warehouse_by_branch_id(branch_id: int, db: Session = Depends(get_db)):
     branch = BranchRepository.find_by_id(db, Branch, branch_id)
     if not branch:
         raise HTTPException(status_code=404, detail="Branch not found")
@@ -91,4 +89,35 @@ def delete_warehouse(warehouse_id: int, id: int = Depends(get_current_user), db:
     if not warehouse:
         raise HTTPException(status_code=404, detail="Warehouse not found")
     WarehouseRepository.delete(db, warehouse)
+    return ResponseSchema.from_api_route(status_code=200, data=warehouse).dict(exclude_none=True)
+
+
+@warehouse_route.get("/by-port/{port_id}", dependencies=[Depends(JWTBearer())],
+                     response_model=ResponseSchema[WarehouseSchema])
+def get_warehouse_by_port_id(port_id: int, db: Session = Depends(get_db)):
+    port = PortRepository.find_by_id(db, Port, port_id)
+    if not port:
+        raise HTTPException(status_code=404, detail="Port not found")
+    warehouse = WarehouseRepository.find_by_id(db, Warehouse, port.warehouse_id)
+    if not warehouse:
+        raise HTTPException(status_code=404, detail="Warehouse not found")
+    return ResponseSchema.from_api_route(status_code=200, data=warehouse).dict(exclude_none=True)
+
+
+# get list all warehouse no token require
+@warehouse_route.get("/all/no-token", response_model=ResponseSchema[List[WarehouseSchema]])
+def get_all_warehouse(db: Session = Depends(get_db)):
+    warehouses = WarehouseRepository.find_all(db, Warehouse)
+    return ResponseSchema.from_api_route(status_code=200, data=warehouses).dict(exclude_none=True)
+
+
+# get warehouse by port id no token require
+@warehouse_route.get("/by-port-no-token/{port_id}", response_model=ResponseSchema[WarehouseSchema])
+def get_warehouse_by_port_id(port_id: int, db: Session = Depends(get_db)):
+    port = PortRepository.find_by_id(db, Port, port_id)
+    if not port:
+        raise HTTPException(status_code=404, detail="Port not found")
+    warehouse = WarehouseRepository.find_by_id(db, Warehouse, port.warehouse_id)
+    if not warehouse:
+        raise HTTPException(status_code=404, detail="Warehouse not found")
     return ResponseSchema.from_api_route(status_code=200, data=warehouse).dict(exclude_none=True)

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from models.invoice import Voyage, Invoice
+from models.invoice import Voyage, Invoice, History
 from repositories.base_repository import BaseRepository
 
 
@@ -22,6 +22,19 @@ class VoyageRepository(BaseRepository):
     def find_by_invoice_id(db: Session, invoice_id):
         return db.query(Voyage).filter(Voyage.invoice_id == invoice_id).first()
 
+    @staticmethod
+    def find_by_pickup_staff_id(db: Session, pickup_staff_id):
+        return db.query(Voyage).filter(Voyage.pickup_staff_id == pickup_staff_id).all()
+
+    @staticmethod
+    def find_by_pickup_staff_id_and_status(db: Session, pickup_staff_id, delivery_status):
+        return db.query(Voyage).filter(Voyage.pickup_staff_id == pickup_staff_id,
+                                       Voyage.delivery_status == delivery_status).all()
+
+    @staticmethod
+    def find_by_headquarter_id_and_status(db: Session, headquarter_id, delivery_status):
+        return db.query(Voyage).filter(Voyage.headquarter_id == headquarter_id,
+                                       Voyage.delivery_status == delivery_status).all()
 
 class InvoiceRepository(BaseRepository):
 
@@ -48,3 +61,10 @@ class InvoiceRepository(BaseRepository):
     @staticmethod
     def find_by_paided(db: Session, paided):
         return db.query(Invoice).filter(Invoice.paided == paided).all()
+
+
+class HistoryRepository(BaseRepository):
+
+    @staticmethod
+    def find_by_voyage_id(db: Session, voyage_id):
+        return db.query(History).filter(History.voyage_id == voyage_id).all()

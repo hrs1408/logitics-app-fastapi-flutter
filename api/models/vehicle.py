@@ -23,3 +23,4 @@ class Vehicle(Base):
     users = relationship("User", back_populates="vehicles", uselist=True)
     branch = relationship("Branch", back_populates="vehicles", uselist=False)
     voyages = relationship("Voyage", back_populates="vehicle", uselist=False)
+    histories = relationship("History", back_populates="vehicle", uselist=False)

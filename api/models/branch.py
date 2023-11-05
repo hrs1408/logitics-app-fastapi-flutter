@@ -33,6 +33,7 @@ class Headquarter(Base):
 
     branch = relationship("Branch", back_populates="headquarters", uselist=False)
     voyages = relationship("Voyage", back_populates="headquarter", uselist=True)
+    histories = relationship("History", back_populates="headquarter", uselist=True)
 
 
 class Warehouse(Base):
@@ -58,3 +59,5 @@ class Port(Base):
 
     warehouse = relationship("Warehouse", back_populates="ports", uselist=False)
     voyages = relationship("Voyage", back_populates="port", uselist=True)
+    histories = relationship("History", back_populates="port", uselist=True)
+

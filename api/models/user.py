@@ -57,6 +57,10 @@ class User(Base):
     delivery_voyages = relationship("Voyage", foreign_keys='Voyage.delivery_staff_id', back_populates="delivery_staff",
                                     uselist=True)
     timekeeping = relationship("Timekeeping", back_populates="user", uselist=True)
+    pickup_histories = relationship("History", foreign_keys='History.pickup_staff_id', back_populates="pickup_staff",
+                                    uselist=True)
+    delivery_histories = relationship("History", foreign_keys='History.delivery_staff_id', back_populates="delivery_staff",
+                                        uselist=True)
 
 
 class UserInformation(Base):

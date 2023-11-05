@@ -76,6 +76,7 @@ class Voyage(Base):
     pickup_staff_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     delivery_staff_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     vehicle_id = Column(Integer, ForeignKey('vehicles.id'), nullable=True)
+    created_at = Column(String(255), nullable=False)
 
     invoice = relationship("Invoice", back_populates="voyages", uselist=False)
     port = relationship("Port", back_populates="voyages", uselist=False)
@@ -84,3 +85,27 @@ class Voyage(Base):
     delivery_staff = relationship("User", foreign_keys=[delivery_staff_id], back_populates="delivery_voyages",
                                   uselist=False)
     vehicle = relationship("Vehicle", back_populates="voyages", uselist=False)
+    histories = relationship("History", back_populates="voyage", uselist=True)
+
+
+class History(Base):
+    __tablename__ = 'histories'
+
+    id = Column(Integer, primary_key=True, index=True)
+    voyage_id = Column(Integer, ForeignKey('voyages.id'), nullable=False)
+    headquarter_id = Column(Integer, ForeignKey('headquarters.id'), nullable=False)
+    port_id = Column(Integer, ForeignKey('ports.id'), nullable=False)
+    delivery_status = Column(String(255), default=DeliveryStatus.CREATED, nullable=False)
+    pickup_staff_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    delivery_staff_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    vehicle_id = Column(Integer, ForeignKey('vehicles.id'), nullable=True)
+    created_at = Column(String(255), nullable=False)
+
+    voyage = relationship("Voyage", back_populates="histories", uselist=False)
+    port = relationship("Port", back_populates="histories", uselist=False)
+    headquarter = relationship("Headquarter", back_populates="histories", uselist=False)
+    pickup_staff = relationship("User", foreign_keys=[pickup_staff_id], back_populates="pickup_histories",
+                                uselist=False)
+    delivery_staff = relationship("User", foreign_keys=[delivery_staff_id], back_populates="delivery_histories",
+                                  uselist=False)
+    vehicle = relationship("Vehicle", back_populates="histories", uselist=False)
